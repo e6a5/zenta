@@ -1,0 +1,102 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Run tests
+      run: go test -v ./...
+
+    - name: Set up build variables
+      run: |
+        echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        echo "COMMIT=${{ github.sha }}" >> $GITHUB_ENV
+        echo "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
+
+    - name: Build cross-platform binaries
+      run: |
+        mkdir -p dist
+        
+        # Build for multiple platforms
+        platforms=(
+          "linux/amd64"
+          "linux/arm64"
+          "darwin/amd64"
+          "darwin/arm64"
+          "windows/amd64"
+          "freebsd/amd64"
+        )
+        
+        for platform in "${platforms[@]}"; do
+          GOOS=${platform%/*}
+          GOARCH=${platform#*/}
+          
+          output_name="zenta-${VERSION}-${GOOS}-${GOARCH}"
+          if [ "$GOOS" = "windows" ]; then
+            output_name+=".exe"
+          fi
+          
+          echo "Building for $GOOS/$GOARCH..."
+          CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build \
+            -ldflags="-s -w -X 'github.com/e6a5/zenta/internal/version.Version=${VERSION}' -X 'github.com/e6a5/zenta/internal/version.GitCommit=${COMMIT}' -X 'github.com/e6a5/zenta/internal/version.BuildDate=${BUILD_DATE}'" \
+            -o "dist/${output_name}" .
+            
+          # Create tar.gz for unix systems, zip for windows
+          if [ "$GOOS" = "windows" ]; then
+            cd dist && zip "${output_name%.exe}.zip" "$output_name" && cd ..
+            rm "dist/$output_name"
+          else
+            cd dist && tar -czf "${output_name}.tar.gz" "$output_name" && cd ..
+            rm "dist/$output_name"
+          fi
+        done
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        if [ -f CHANGELOG.md ]; then
+          # Extract latest changes from CHANGELOG.md
+          sed -n '/^## \[/,/^## \[/p' CHANGELOG.md | head -n -1 | tail -n +2 > latest_changes.md
+        else
+          echo "🎉 New release of zenta!" > latest_changes.md
+          echo "" >> latest_changes.md
+          echo "See the full list of changes in the [commit history](https://github.com/e6a5/zenta/compare/$(git describe --tags --abbrev=0 HEAD^)...${VERSION})." >> latest_changes.md
+        fi
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: latest_changes.md
+        files: dist/*
+        draft: false
+        prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
