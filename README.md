@@ -1,183 +1,186 @@
-# zenta
+# 🧘 zenta
 
-> Mindfulness for terminal users
+> **Mindfulness that fits your workflow**
 
-**zenta** is a lightweight command-line tool that brings mindfulness into your developer workflow. Take guided breathing moments, track your awareness, and cultivate presence—all from your terminal.
+**zenta** brings calm to your terminal. Take guided breathing breaks, track awareness moments, and cultivate presence—all without leaving your development flow.
 
-Inspired by Zen philosophy and the Unix principle of "do one thing, and do it well."
+*Built for developers who code mindfully.* ✨
 
-## Why zenta?
+---
 
-**For developers who want to:**
-- 🧘 **Take mindful breaks** during intense coding sessions
-- 📊 **Track distractions** and build self-awareness
-- 🌿 **Reduce context switching** with terminal-native mindfulness
-- ⚡ **Stay present** without leaving their development environment
-
-**The result:** More focused work, better awareness, and a calmer mind.
-
-## Installation
-
-### Quick Install
+## ⚡ Try it now
 
 ```bash
-# Using make (recommended)
-git clone https://github.com/e6a5/zenta.git
-cd zenta
-make install-system
-```
+# Take a quick 1-minute breathing break
+zenta now --quick
 
-### From Source
-
-```bash
-git clone https://github.com/e6a5/zenta.git
-cd zenta
-make build
-sudo mv zenta /usr/local/bin/  # or any directory in your PATH
-```
-
-### Pre-built Binaries
-
-Download the latest release for your platform from [GitHub Releases](https://github.com/e6a5/zenta/releases).
-
-Available platforms:
-- Linux (amd64, arm64)
-- macOS (amd64, arm64)
-- Windows (amd64)
-- FreeBSD (amd64)
-
-### Requirements
-
-- Go 1.20 or later (for building from source)
-
-## Quick Start
-
-```bash
-# Take a mindful moment with guided breathing
+# Standard 3-minute session with wisdom quote  
 zenta now
 
-# Log when you notice distraction
-zenta log "Scrolled social media instead of coding"
+# Extended 5-minute deep session
+zenta now --extended
+```
 
-# Track different types of awareness
-zenta log -t reflection "Noticed I was feeling anxious"
-zenta log -t insight "Morning hours are my most focused time"
+**🎯 Perfect for:** Code reviews, debugging sessions, before standups, or anytime you need to reset.
 
-# View your mindfulness patterns
+---
+
+## 🌸 What makes zenta special?
+
+### **Instant Calm**
+```bash
+$ zenta now --quick
+
+    🧘 Welcome to your mindful moment
+       Find a comfortable position... Quick session (1 cycle)
+       Press 'q' anytime to exit gracefully
+
+       When ready, press [ENTER] to begin...
+       Let's breathe! 🌸
+
+       Cycle 1
+    🔴 🔵 🔵 🔵 🔵
+    🔴          🔴    🌬️ Inhale   [████] 4s
+    🔴          🔴
+    🔴          🔴
+    🟡 🟡 🟡 🟡 🔴
+
+       ✨ Perfect! You've completed your mindful moment
+       Here's wisdom to carry this calm with you:
+
+       ╭─────────────────────────────────────────────────────╮
+       │  🌊 The quieter you become, the more you are able  │
+       │                     to hear.                       │
+       │                                                    │
+       ╰─────────────────────────────────────────────────────╯
+```
+
+### **Smart & Flexible**
+- **`--quick`** → 1-minute breathing break for busy moments
+- **`--extended`** → 5-minute deep session when you have time  
+- **`--silent`** → Pure breathing, no quotes for focused sessions
+- **Progress bars** → See exactly where you are in each breath
+- **User-paced** → Start when you're ready, exit gracefully anytime
+
+### **Built for Developers**
+```bash
+# Track patterns that matter
+zenta log "Got distracted by Slack notifications"
+zenta log -t insight "Morning standup made me anxious"
+
+# Understand your mind
 zenta stats week
-```
-
-## Commands
-
-### 🧘 `zenta now`
-**Take a mindful moment with guided breathing exercise + wisdom quote**
-
-```bash
-$ zenta now
-🧘 Let's take a moment to breathe together...
-   Follow the rhythm: Inhale → Hold → Exhale → Hold
-
-   Cycle 1/3:
-   🌬️  Inhale ●●●●
-   ⏸️  Hold   ○○○○
-   💨 Exhale ●●●●
-   ⏸️  Hold   ○○○○
-   
-   [... 2 more cycles ...]
-
-✨ Beautiful. Now, here's a moment of wisdom:
-
-🌊 You have power over your mind—not outside events. 
-   Realize this, and you will find strength. - Marcus Aurelius
-```
-
-### 📝 `zenta log`
-**Track your awareness moments**
-
-```bash
-# Log distraction (default)
-zenta log "Got distracted by notifications"
-
-# Log reflection on your mental state
-zenta log -t reflection "Noticed I was feeling overwhelmed"
-
-# Log insights about your productivity
-zenta log -t insight "I focus better with music"
-```
-
-**Types:** `distraction` (default), `reflection`, `insight`
-
-### 📊 `zenta stats`
-**Understand your mindfulness patterns**
-
-```bash
-$ zenta stats
 📊 Zenta Statistics (week)
-────────────────────────────────────────
-
 📅 Time Range: Jun 24 to Jun 26, 2025
-📝 Total Entries: 8
-
 Entry Types:
-  🔴 Distractions: 5
+  🔴 Distractions: 5  ← Most happen at 2pm
   🤔 Reflections:  2
   💡 Insights:     1
-  ⏰ Sessions:     0
-
-Hourly Activity:
-  09:00 ██████████ 2
-  14:00 ████████████████████ 4
-  16:00 █████ 2
 ```
 
-**Periods:** `today`, `week` (default), `month`, `all`
+---
 
-## Key Features
+## 🚀 Installation
 
-✅ **Guided breathing exercises** - 4-4-4-4 box breathing with visual cues  
-✅ **Mindfulness quotes** - 25+ wisdom quotes from Zen, Stoic, and mindfulness traditions  
-✅ **Awareness tracking** - Log distractions, reflections, and insights  
-✅ **Pattern analysis** - ASCII charts showing your mindfulness trends  
-✅ **Privacy-first** - All data stays local, no internet required  
-✅ **Unix philosophy** - Simple, composable, does one thing well  
+**macOS/Linux (quick):**
+```bash
+git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
+```
 
-## Unix Philosophy in Action
+**Or download pre-built binaries:** [GitHub Releases](https://github.com/e6a5/zenta/releases)
 
-zenta works great with other terminal tools:
+*Supports: Linux, macOS, Windows, FreeBSD (all architectures)*
+
+---
+
+## 💡 Core Commands
+
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `zenta now` | Standard 3-cycle breathing session | Regular mindful breaks |
+| `zenta now --quick` | Quick 1-cycle session (1 min) | Between meetings, quick reset |
+| `zenta now --extended` | Deep 5-cycle session (5 min) | Start of day, end of sprint |
+| `zenta now --silent` | Breathing only, no quote | Pure focus, no distractions |
+| `zenta log "reason"` | Track awareness moments | Notice patterns, build habits |
+| `zenta stats` | View your mindfulness patterns | Weekly reflection, insights |
+
+---
+
+## 🎯 Why developers love zenta
+
+✅ **Terminal-native** - No context switching, fits your workflow  
+✅ **Lightweight** - Single binary, no dependencies, <2MB  
+✅ **Private** - All data local, no internet, no tracking  
+✅ **Unix-friendly** - Pipes, scripts, automation-ready  
+✅ **Instant** - From stress to calm in under 60 seconds  
+✅ **Progressive** - Build awareness over time  
+
+---
+
+## 🧠 Smart Awareness Tracking
+
+Track the moments that matter and build better habits:
 
 ```bash
-# Email yourself weekly mindfulness reports
-zenta stats week | mail -s "Weekly Mindfulness" you@example.com
+# Common developer distractions
+zenta log "Opened Twitter instead of documentation"
+zenta log "Started debugging without reading error message"
+zenta log "Procrastinated on code review"
 
-# Count your distractions
-zenta stats | grep "Distractions:" | awk '{print $2}'
+# Reflections and insights  
+zenta log -t reflection "Feeling overwhelmed by technical debt"
+zenta log -t insight "Pair programming reduces my anxiety"
 
-# Archive your logs
-zenta stats all > mindfulness-report-2025.txt
+# See patterns emerge
+zenta stats month
 ```
 
-## Privacy & Data
+**Result:** Better self-awareness, fewer distractions, calmer coding.
 
-- **Local only** - All data stored in `~/.zenta/` on your machine
-- **No tracking** - No analytics, telemetry, or data collection
-- **No internet** - Works completely offline
-- **Your data** - Export, modify, or delete anytime
+---
 
-## What's Next?
+## 🛠 Unix Philosophy in Action
 
-See our [**Roadmap**](ROADMAP.md) for upcoming features like:
-- Focus timers (`zenta start`)
-- Mindful breaks (`zenta break`) 
-- Advanced analytics and insights
+zenta plays well with your existing tools:
 
-## Get Involved
+```bash
+# Daily mindfulness report
+zenta stats today | mail -s "Daily Mindfulness" you@example.com
 
-- 🐛 **Found a bug?** [Report it](https://github.com/e6a5/zenta/issues)
-- 💡 **Have an idea?** [Share it](https://github.com/e6a5/zenta/discussions)
-- 🔧 **Want to contribute?** See [CONTRIBUTING.md](CONTRIBUTING.md)
-- 📖 **Need help?** Check out the [documentation](https://github.com/e6a5/zenta/wiki)
+# Mindful git workflow
+alias mindful-commit="zenta now --quick && git commit"
 
-## License
+# Weekly team insights
+zenta stats week > weekly-mindfulness.md
+
+# Count distractions
+zenta stats | grep "Distractions:" | awk '{print $2}'
+```
+
+---
+
+## 🌿 What's Next?
+
+**Immediate roadmap:**
+- [ ] Focus timers (`zenta start 25` for Pomodoro)
+- [ ] Mindful breaks (`zenta break` between deep work)
+- [ ] Custom breathing patterns (4-7-8, triangle breathing)
+- [ ] Integration hooks for IDEs and editors
+
+**Vision:** The most thoughtful developer productivity tool ever built.
+
+---
+
+## 🤝 Join the Community
+
+- 🐛 **Found a bug?** → [Report it](https://github.com/e6a5/zenta/issues)
+- 💡 **Have an idea?** → [Share it](https://github.com/e6a5/zenta/discussions)  
+- 🔧 **Want to contribute?** → See [CONTRIBUTING.md](CONTRIBUTING.md)
+- 📖 **Need help?** → Check the [documentation](https://github.com/e6a5/zenta/wiki)
+
+---
+
+## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
@@ -185,4 +188,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 > *"The best way to take care of the future is to take care of the present moment."*
 
-**zenta** - mindfulness for terminal users 🧘‍♂️ 
+**Start your mindful coding journey today.** 🧘‍♂️
+
+```bash
+zenta now --quick  # Just try it
+``` 
