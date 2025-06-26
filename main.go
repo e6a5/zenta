@@ -31,22 +31,22 @@ const (
 	BoxHeight          = 4
 	DotSpacing         = 3
 	ProgressBarWidth   = 8
-	
+
 	// Layout padding constants
-	LeftPadding        = 4   // Left margin for all content
-	RightPadding       = 4   // Right margin buffer
-	BottomPadding      = 2   // Extra spacing at bottom
-	SectionSpacing     = 1   // Space between sections
+	LeftPadding    = 4 // Left margin for all content
+	RightPadding   = 4 // Right margin buffer
+	BottomPadding  = 2 // Extra spacing at bottom
+	SectionSpacing = 1 // Space between sections
 )
 
 // Breathing session configuration
 type BreathingSession struct {
-	Cycles       int
-	ShowQuote    bool
-	InhaleDur    int
-	HoldDur      int
-	ExhaleDur    int
-	RestDur      time.Duration
+	Cycles    int
+	ShowQuote bool
+	InhaleDur int
+	HoldDur   int
+	ExhaleDur int
+	RestDur   time.Duration
 }
 
 func main() {
@@ -110,10 +110,10 @@ func showHelp() {
 
 func handleNow(args []string) {
 	session := parseNowArgs(args)
-	
+
 	// Add top spacing
 	fmt.Println()
-	
+
 	// Welcome section with consistent left padding
 	printWithPadding("🧘 Welcome to your mindful moment")
 	if session.Cycles == 1 {
@@ -122,14 +122,14 @@ func handleNow(args []string) {
 		printWithPadding(fmt.Sprintf("   Find a comfortable position... %d breathing cycles", session.Cycles))
 	}
 	printWithPadding("   Press 'q' anytime to exit gracefully")
-	
+
 	// Section spacing
 	addSectionSpacing()
-	
+
 	// Enhanced preparation
 	printWithPadding("   When ready, press [ENTER] to begin...")
 	waitForUserReady()
-	
+
 	// Gentle countdown with padding
 	for i := 3; i >= 1; i-- {
 		if checkForExit() {
@@ -139,12 +139,12 @@ func handleNow(args []string) {
 		time.Sleep(1 * time.Second)
 	}
 	printWithPadding("   Let's breathe! 🌸")
-	
+
 	addSectionSpacing()
 
 	// Dynamic cycle headers based on session cycles
 	showCycleHeaders(session.Cycles)
-	
+
 	// Reserve space for breathing visualization
 	for i := 0; i < 6; i++ {
 		fmt.Println()
@@ -163,11 +163,11 @@ func handleNow(args []string) {
 	}
 
 	fmt.Print("\033[6B")
-	
+
 	// Completion section with spacing
 	addSectionSpacing()
 	printWithPadding("   ✨ Perfect! You've completed your mindful moment")
-	
+
 	if session.ShowQuote {
 		addSectionSpacing()
 		printWithPadding("   Here's wisdom to carry this calm with you:")
@@ -179,7 +179,7 @@ func handleNow(args []string) {
 		addSectionSpacing()
 		printWithPadding("   Carry this calm with you throughout your day 🙏")
 	}
-	
+
 	// Add bottom padding
 	addBottomPadding()
 }
@@ -211,7 +211,7 @@ func parseNowArgs(args []string) *BreathingSession {
 
 // waitForUserReady waits for user to press ENTER
 func waitForUserReady() {
-	bufio.NewReader(os.Stdin).ReadBytes('\n')
+	_, _ = bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
 
 // checkForExit checks if user pressed 'q' to exit (simplified for now)
@@ -239,7 +239,7 @@ func showCycleHeaders(cycles int) {
 func drawEnhancedBreathingCycle(cycleNum int, session *BreathingSession) {
 	// Calculate horizontal offset with proper spacing for multiple cycles
 	xOffset := (cycleNum - 1) * CycleSpacing
-	
+
 	// Highlight current cycle
 	highlightCurrentCycle(cycleNum)
 
@@ -259,28 +259,28 @@ func drawEnhancedBreathingCycle(cycleNum int, session *BreathingSession) {
 
 	for phaseIdx, phase := range phases {
 		showEnhancedPhaseInstruction(phase.emoji, phase.instruction)
-		
+
 		for i := 1; i <= phase.duration; i++ {
 			if checkForExit() {
 				return
 			}
-			
+
 			// Draw progress bar instead of just dots
 			showBreathingProgress(phase.emoji, phase.name, i, phase.duration)
-			
+
 			// Still draw the box dots for visual continuity
 			var row, col int
 			switch phaseIdx {
 			case 0: // inhale - top edge
 				row, col = 0, xOffset+i*DotSpacing
-			case 1: // hold - right edge  
+			case 1: // hold - right edge
 				row, col = i, xOffset+BoxWidth
 			case 2: // exhale - bottom edge
 				row, col = BoxHeight, xOffset+BoxWidth-i*DotSpacing
 			case 3: // hold - left edge
 				row, col = BoxHeight-i, xOffset
 			}
-			
+
 			drawDotAtPosition(row, col, phase.dot)
 			time.Sleep(1 * time.Second)
 		}
@@ -291,7 +291,7 @@ func drawEnhancedBreathingCycle(cycleNum int, session *BreathingSession) {
 
 // showEnhancedPhaseInstruction shows breathing phase with better formatting
 func showEnhancedPhaseInstruction(emoji, instruction string) {
-	fmt.Print("\033[s") // Save cursor position
+	fmt.Print("\033[s")  // Save cursor position
 	fmt.Print("\033[7B") // Move to instruction line
 	fmt.Print("\r")
 	fmt.Printf("%s   %s  %s", strings.Repeat(" ", LeftPadding), emoji, instruction)
@@ -301,19 +301,21 @@ func showEnhancedPhaseInstruction(emoji, instruction string) {
 
 // showBreathingProgress shows a progress bar for the current breathing phase
 func showBreathingProgress(emoji, phase string, current, total int) {
-	fmt.Print("\033[s") // Save cursor position
+	fmt.Print("\033[s")  // Save cursor position
 	fmt.Print("\033[8B") // Move below instruction line
 	fmt.Print("\r")
-	
+
 	// Create progress bar
 	filled := strings.Repeat("█", current)
 	empty := strings.Repeat("░", total-current)
 	progress := fmt.Sprintf("[%s%s]", filled, empty)
-	
+
 	// Show phase name and progress with left padding
-	fmt.Printf("%s   %s %-8s %s %ds", strings.Repeat(" ", LeftPadding), emoji, strings.Title(phase), progress, total-current+1)
+	// Capitalize first letter of phase name
+	capitalizedPhase := strings.ToUpper(phase[:1]) + phase[1:]
+	fmt.Printf("%s   %s %-8s %s %ds", strings.Repeat(" ", LeftPadding), emoji, capitalizedPhase, progress, total-current+1)
 	fmt.Print(strings.Repeat(" ", 20)) // Clear rest of line
-	
+
 	fmt.Print("\033[u") // Restore cursor position
 }
 
@@ -334,49 +336,6 @@ func addBottomPadding() {
 	}
 }
 
-func drawBoxWithGuidance(cycleNum int) {
-	// Calculate horizontal offset for each box
-	xOffset := (cycleNum - 1) * CycleSpacing
-
-	// Highlight current cycle
-	highlightCurrentCycle(cycleNum)
-
-	// Top edge - Inhale with guidance
-	showPhaseInstruction("🌬️  Breathe IN slowly and deeply...")
-	for i := 1; i <= BoxHeight; i++ {
-		drawDotAtPosition(0, xOffset+i*DotSpacing, "🔵")
-		showCountdown(BoxHeight - i + 1)
-		time.Sleep(1 * time.Second)
-	}
-
-	// Right edge - Hold with guidance
-	showPhaseInstruction("⏸️  Hold your breath gently...")
-	for i := 1; i <= BoxHeight; i++ {
-		drawDotAtPosition(i, xOffset+BoxWidth, "🔴")
-		showCountdown(BoxHeight - i + 1)
-		time.Sleep(1 * time.Second)
-	}
-
-	// Bottom edge - Exhale with guidance
-	showPhaseInstruction("💨 Breathe OUT slowly, release all tension...")
-	for i := 1; i <= BoxHeight; i++ {
-		drawDotAtPosition(BoxHeight, xOffset+BoxWidth-i*DotSpacing, "🟡")
-		showCountdown(BoxHeight - i + 1)
-		time.Sleep(1 * time.Second)
-	}
-
-	// Left edge - Hold with guidance
-	showPhaseInstruction("⏸️  Hold empty, stay present...")
-	for i := 1; i <= BoxHeight; i++ {
-		drawDotAtPosition(BoxHeight-i, xOffset, "🔴")
-		showCountdown(BoxHeight - i + 1)
-		time.Sleep(1 * time.Second)
-	}
-
-	// Clear the instruction line
-	clearInstructionLine()
-}
-
 func highlightCurrentCycle(currentCycle int) {
 	// Save cursor position
 	fmt.Print("\033[s")
@@ -388,7 +347,7 @@ func highlightCurrentCycle(currentCycle int) {
 	// Show cycles dynamically based on what's displayed with proper padding
 	fmt.Print(strings.Repeat(" ", LeftPadding))
 	fmt.Print("   ") // Additional indent for cycle headers
-	
+
 	maxDisplay := 5 // Maximum cycles to display in headers
 	for i := 1; i <= maxDisplay; i++ {
 		if i > 1 {
@@ -420,21 +379,6 @@ func showPhaseInstruction(instruction string) {
 
 	// Restore cursor position
 	fmt.Print("\033[u")
-}
-
-func showCountdown(count int) {
-	if count > 1 {
-		// Save cursor position
-		fmt.Print("\033[s")
-
-		// Move to countdown position (next to instruction)
-		fmt.Print("\033[7B")
-		fmt.Print("\033[50C") // Move right to countdown area
-		fmt.Printf("(%d)", count-1)
-
-		// Restore cursor position
-		fmt.Print("\033[u")
-	}
 }
 
 func clearInstructionLine() {
