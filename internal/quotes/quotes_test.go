@@ -10,10 +10,6 @@ func TestNewQuoteService(t *testing.T) {
 	if qs == nil {
 		t.Error("Expected QuoteService instance, got nil")
 	}
-
-	if qs.rand == nil {
-		t.Error("Expected random generator to be initialized")
-	}
 }
 
 func TestGetRandomQuote(t *testing.T) {
@@ -45,7 +41,7 @@ func TestGetAllQuotes(t *testing.T) {
 
 	// Test that it returns a copy (modifying shouldn't affect original)
 	originalLen := len(quotes)
-	quotes = append(quotes, "Test quote")
+	_ = append(quotes, "Test quote") // Use blank identifier to avoid ineffectual assignment
 
 	quotesAgain := qs.GetAllQuotes()
 	if len(quotesAgain) != originalLen {
@@ -67,7 +63,7 @@ func TestQuoteCount(t *testing.T) {
 }
 
 func TestBuiltinQuotesContent(t *testing.T) {
-	// Test that all quotes are non-empty and contain emojis (our format)
+	// Test that all quotes are non-empty and meaningful
 	for i, quote := range builtinQuotes {
 		if quote == "" {
 			t.Errorf("Quote %d is empty", i)
@@ -77,19 +73,9 @@ func TestBuiltinQuotesContent(t *testing.T) {
 			t.Errorf("Quote %d seems too short: %s", i, quote)
 		}
 
-		// Our quotes should contain emojis and meaningful content
-		if !strings.Contains(quote, "🧘") && !strings.Contains(quote, "🌱") &&
-			!strings.Contains(quote, "⭐") && !strings.Contains(quote, "🍃") &&
-			!strings.Contains(quote, "🌊") && !strings.Contains(quote, "🎯") &&
-			!strings.Contains(quote, "🌸") && !strings.Contains(quote, "🕯️") &&
-			!strings.Contains(quote, "🌿") && !strings.Contains(quote, "⚡") &&
-			!strings.Contains(quote, "🎋") && !strings.Contains(quote, "🌅") &&
-			!strings.Contains(quote, "🪨") && !strings.Contains(quote, "🕊️") &&
-			!strings.Contains(quote, "⚖️") && !strings.Contains(quote, "🪷") {
-			// This is a loose check - at least verify it has some content
-			if len(strings.TrimSpace(quote)) < 5 {
-				t.Errorf("Quote %d appears to have no meaningful content: %s", i, quote)
-			}
+		// Verify it has some meaningful content
+		if len(strings.TrimSpace(quote)) < 5 {
+			t.Errorf("Quote %d appears to have no meaningful content: %s", i, quote)
 		}
 	}
 }

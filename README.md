@@ -2,22 +2,19 @@
 
 > Mindfulness for terminal users
 
-**zenta** is a lightweight command-line tool designed for developers and terminal users who want to cultivate mindfulness, reduce distractions, and maintain awareness throughout their workday. Inspired by Zen philosophy and Stoic practice, zenta brings calm, clarity, and presence into the world of deep work.
+**zenta** is a lightweight command-line tool that brings mindfulness into your developer workflow. Take guided breathing moments, track your awareness, and cultivate presence—all from your terminal.
 
-## Philosophy
+Inspired by Zen philosophy and the Unix principle of "do one thing, and do it well."
 
-Following the Unix philosophy: **"Do one thing, and do it well"**
+## Why zenta?
 
-zenta exists solely to help terminal users cultivate mindfulness and awareness. Every feature serves this single purpose.
+**For developers who want to:**
+- 🧘 **Take mindful breaks** during intense coding sessions
+- 📊 **Track distractions** and build self-awareness
+- 🌿 **Reduce context switching** with terminal-native mindfulness
+- ⚡ **Stay present** without leaving their development environment
 
-## Features
-
-### Phase 1 (MVP) - Available Now ✅
-
-- **`zenta now`** - Display mindfulness quotes to help you return to the present moment
-- **`zenta log "<reason>"`** - Log moments of distraction or reflection with timestamps
-- **`zenta stats [period]`** - View analytics from your logs with ASCII charts
-- **`zenta help`** - Context-sensitive help and usage examples
+**The result:** More focused work, better awareness, and a calmer mind.
 
 ## Installation
 
@@ -53,154 +50,139 @@ Available platforms:
 
 - Go 1.20 or later (for building from source)
 
-## Usage
-
-### Quick Start
+## Quick Start
 
 ```bash
-# Show a mindfulness quote
+# Take a mindful moment with guided breathing
 zenta now
 
-# Log a moment of distraction
+# Log when you notice distraction
 zenta log "Scrolled social media instead of coding"
 
-# View your statistics
-zenta stats
+# Track different types of awareness
+zenta log -t reflection "Noticed I was feeling anxious"
+zenta log -t insight "Morning hours are my most focused time"
 
-# See all available commands
-zenta help
+# View your mindfulness patterns
+zenta stats week
 ```
 
-### Commands
+## Commands
 
-#### `zenta now`
-Get a random mindfulness quote to help center yourself.
+### 🧘 `zenta now`
+**Take a mindful moment with guided breathing exercise + wisdom quote**
 
 ```bash
 $ zenta now
-🌊 You have power over your mind—not outside events. Realize this, and you will find strength. - Marcus Aurelius
+🧘 Let's take a moment to breathe together...
+   Follow the rhythm: Inhale → Hold → Exhale → Hold
+
+   Cycle 1/3:
+   🌬️  Inhale ●●●●
+   ⏸️  Hold   ○○○○
+   💨 Exhale ●●●●
+   ⏸️  Hold   ○○○○
+   
+   [... 2 more cycles ...]
+
+✨ Beautiful. Now, here's a moment of wisdom:
+
+🌊 You have power over your mind—not outside events. 
+   Realize this, and you will find strength. - Marcus Aurelius
 ```
 
-#### `zenta log "<reason>"`
-Log a moment of distraction, reflection, or insight.
+### 📝 `zenta log`
+**Track your awareness moments**
 
 ```bash
-$ zenta log "Checked email instead of finishing the code review"
-✓ Logged: Checked email instead of finishing the code review
-  Take a moment to breathe and return to the present.
+# Log distraction (default)
+zenta log "Got distracted by notifications"
+
+# Log reflection on your mental state
+zenta log -t reflection "Noticed I was feeling overwhelmed"
+
+# Log insights about your productivity
+zenta log -t insight "I focus better with music"
 ```
 
-#### `zenta stats [period]`
-View analytics about your logged entries.
+**Types:** `distraction` (default), `reflection`, `insight`
+
+### 📊 `zenta stats`
+**Understand your mindfulness patterns**
 
 ```bash
-$ zenta stats week
+$ zenta stats
 📊 Zenta Statistics (week)
 ────────────────────────────────────────
 
 📅 Time Range: Jun 24 to Jun 26, 2025
-📝 Total Entries: 5
+📝 Total Entries: 8
 
 Entry Types:
   🔴 Distractions: 5
-  🤔 Reflections:  0
-  💡 Insights:     0
+  🤔 Reflections:  2
+  💡 Insights:     1
   ⏰ Sessions:     0
 
 Hourly Activity:
   09:00 ██████████ 2
   14:00 ████████████████████ 4
-  16:00 █████ 1
+  16:00 █████ 2
 ```
 
-**Available periods:**
-- `today` - Today's entries
-- `week` - This week's entries (default)
-- `month` - This month's entries  
-- `all` - All entries
+**Periods:** `today`, `week` (default), `month`, `all`
 
-## Data Storage
+## Key Features
 
-zenta stores all data locally in `~/.zenta/`:
+✅ **Guided breathing exercises** - 4-4-4-4 box breathing with visual cues  
+✅ **Mindfulness quotes** - 25+ wisdom quotes from Zen, Stoic, and mindfulness traditions  
+✅ **Awareness tracking** - Log distractions, reflections, and insights  
+✅ **Pattern analysis** - ASCII charts showing your mindfulness trends  
+✅ **Privacy-first** - All data stays local, no internet required  
+✅ **Unix philosophy** - Simple, composable, does one thing well  
 
-```
-~/.zenta/
-├── logs.json       # Your logged entries
-├── config.json     # Configuration (created when needed)
-└── quotes.txt      # Custom quotes (future feature)
-```
+## Unix Philosophy in Action
 
-### Log Format
-
-```json
-[
-  {
-    "id": "uuid-v4",
-    "timestamp": "2025-06-26T14:12:00+07:00",
-    "type": "distraction",
-    "note": "Scrolled Reddit instead of debugging"
-  }
-]
-```
-
-## Philosophy & Design
-
-### Unix Philosophy Guidelines
-
-1. **Single Purpose Focus** - zenta is a mindfulness tool, not a task manager
-2. **Composability** - Works well with other Unix tools via pipes and redirection
-3. **Simplicity Over Features** - Minimal dependencies, sensible defaults
-4. **Text-Based Interface** - ASCII-safe output that works in any terminal
-5. **Fail Gracefully** - Clear error messages, degrade gracefully
-6. **Respect User Environment** - Standard Unix conventions, minimal footprint
-
-### Composability Examples
+zenta works great with other terminal tools:
 
 ```bash
-# Export logs for external analysis
-zenta stats | mail -s "Weekly Focus Report" user@example.com
+# Email yourself weekly mindfulness reports
+zenta stats week | mail -s "Weekly Mindfulness" you@example.com
 
-# Count distractions
+# Count your distractions
 zenta stats | grep "Distractions:" | awk '{print $2}'
 
-# View logs in your preferred pager
-zenta stats all | less
+# Archive your logs
+zenta stats all > mindfulness-report-2025.txt
 ```
 
-## Roadmap
+## Privacy & Data
 
-### Phase 2 (Enhanced)
-- **Timer functionality** - `zenta start`, `zenta break` 
-- **Advanced stats** - More detailed analytics and patterns
-- **History and export** - `zenta history`, `zenta export`
+- **Local only** - All data stored in `~/.zenta/` on your machine
+- **No tracking** - No analytics, telemetry, or data collection
+- **No internet** - Works completely offline
+- **Your data** - Export, modify, or delete anytime
 
-### Phase 3 (Polish)
-- **Sound notifications** - Optional audio cues
-- **Terminal multiplexer optimization** - Better tmux/screen support
-- **Custom themes** - Different quote collections (Zen, Stoic, etc.)
+## What's Next?
 
-## Contributing
+See our [**Roadmap**](ROADMAP.md) for upcoming features like:
+- Focus timers (`zenta start`)
+- Mindful breaks (`zenta break`) 
+- Advanced analytics and insights
 
-zenta follows strict development principles:
+## Get Involved
 
-**Before adding any feature, ask:**
-1. Does this align with helping users be more mindful?
-2. Can users achieve this by combining zenta with other Unix tools?
-3. Will this make zenta harder to understand or use?
-4. Does this respect the "lightweight" promise?
-
-If any answer is "no," reconsider the change.
+- 🐛 **Found a bug?** [Report it](https://github.com/e6a5/zenta/issues)
+- 💡 **Have an idea?** [Share it](https://github.com/e6a5/zenta/discussions)
+- 🔧 **Want to contribute?** See [CONTRIBUTING.md](CONTRIBUTING.md)
+- 📖 **Need help?** Check out the [documentation](https://github.com/e6a5/zenta/wiki)
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## Inspiration
+---
 
-> "The best way to take care of the future is to take care of the present moment."
+> *"The best way to take care of the future is to take care of the present moment."*
 
-zenta draws inspiration from:
-- Zen Buddhism and mindfulness practices
-- Stoic philosophy  
-- The Unix philosophy of simple, composable tools
-- The growing need for digital wellness in developer workflows 
+**zenta** - mindfulness for terminal users 🧘‍♂️ 

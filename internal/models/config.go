@@ -1,3 +1,5 @@
+// Package models defines core data structures and types for zenta.
+// It contains configuration, logging, and other fundamental data models.
 package models
 
 // Config represents the user configuration for zenta

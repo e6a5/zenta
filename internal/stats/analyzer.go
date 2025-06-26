@@ -61,6 +61,8 @@ func (a *Analyzer) GenerateStats(period string) *StatsResult {
 			result.InsightCount++
 		case models.LogTypeSessionStart:
 			result.SessionCount++
+		case models.LogTypeSessionEnd:
+			// SessionEnd doesn't increment SessionCount as SessionStart already does
 		}
 
 		// Hour distribution (0-23)

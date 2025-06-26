@@ -1,8 +1,10 @@
+// Package quotes provides mindfulness quotes and quote management functionality.
+// It offers a collection of built-in quotes inspired by Zen, Stoicism, and mindfulness practices.
 package quotes
 
 import (
-	"math/rand"
-	"time"
+	"crypto/rand"
+	"math/big"
 )
 
 // Built-in mindfulness quotes inspired by Zen, Stoicism, and mindfulness practices
@@ -35,15 +37,11 @@ var builtinQuotes = []string{
 }
 
 // QuoteService handles quote retrieval and management
-type QuoteService struct {
-	rand *rand.Rand
-}
+type QuoteService struct{}
 
-// New creates a new QuoteService with a seeded random generator
+// New creates a new QuoteService
 func New() *QuoteService {
-	return &QuoteService{
-		rand: rand.New(rand.NewSource(time.Now().UnixNano())),
-	}
+	return &QuoteService{}
 }
 
 // GetRandomQuote returns a random quote from the built-in collection
@@ -52,8 +50,14 @@ func (qs *QuoteService) GetRandomQuote() string {
 		return "🧘 Take a breath. This moment is all there is."
 	}
 
-	index := qs.rand.Intn(len(builtinQuotes))
-	return builtinQuotes[index]
+	// Use crypto/rand for better randomness
+	n, err := rand.Int(rand.Reader, big.NewInt(int64(len(builtinQuotes))))
+	if err != nil {
+		// Fallback to first quote if crypto/rand fails
+		return builtinQuotes[0]
+	}
+
+	return builtinQuotes[n.Int64()]
 }
 
 // GetAllQuotes returns all built-in quotes (useful for testing or exporting)

@@ -187,6 +187,12 @@ func handleLog(args []string) {
 	case models.LogTypeInsight:
 		emoji = "💡"
 		message = "Insight captured. Wisdom grows through awareness."
+	case models.LogTypeSessionStart:
+		emoji = "⏰"
+		message = "Session started."
+	case models.LogTypeSessionEnd:
+		emoji = "✅"
+		message = "Session completed."
 	default:
 		emoji = "✓"
 		message = "Entry logged."

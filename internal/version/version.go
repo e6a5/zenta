@@ -1,3 +1,5 @@
+// Package version provides build and version information for zenta.
+// It includes details about the version, git commit, build date, and runtime environment.
 package version
 
 import (
