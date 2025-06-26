@@ -123,13 +123,28 @@ func handleNow() {
 
 func handleLog(args []string) {
 	if len(args) == 0 {
-		fmt.Fprintf(os.Stderr, "Error: Please provide a reason for logging\n")
-		fmt.Fprintf(os.Stderr, "Usage: zenta log [-t type] <reason>\n")
-		fmt.Fprintf(os.Stderr, "Types: distraction (default), reflection, insight\n")
+		printLogUsage()
 		os.Exit(1)
 	}
 
-	// Parse arguments for type flag
+	logType, reason := parseLogArgs(args)
+
+	if strings.TrimSpace(reason) == "" {
+		fmt.Fprintf(os.Stderr, "Error: Please provide a reason for logging\n")
+		os.Exit(1)
+	}
+
+	saveLogEntry(logType, reason)
+	printLogConfirmation(logType, reason)
+}
+
+func printLogUsage() {
+	fmt.Fprintf(os.Stderr, "Error: Please provide a reason for logging\n")
+	fmt.Fprintf(os.Stderr, "Usage: zenta log [-t type] <reason>\n")
+	fmt.Fprintf(os.Stderr, "Types: distraction (default), reflection, insight\n")
+}
+
+func parseLogArgs(args []string) (models.LogType, string) {
 	logType := models.LogTypeDistraction // default
 	var reason string
 
@@ -154,11 +169,10 @@ func handleLog(args []string) {
 		reason = strings.Join(args, " ")
 	}
 
-	if strings.TrimSpace(reason) == "" {
-		fmt.Fprintf(os.Stderr, "Error: Please provide a reason for logging\n")
-		os.Exit(1)
-	}
+	return logType, reason
+}
 
+func saveLogEntry(logType models.LogType, reason string) {
 	// Initialize storage
 	store, err := storage.New()
 	if err != nil {
@@ -174,7 +188,9 @@ func handleLog(args []string) {
 		fmt.Fprintf(os.Stderr, "Error saving log entry: %v\n", err)
 		os.Exit(1)
 	}
+}
 
+func printLogConfirmation(logType models.LogType, reason string) {
 	// Show appropriate message based on log type
 	var emoji, message string
 	switch logType {
