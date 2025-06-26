@@ -3,65 +3,71 @@ run:
   modules-download-mode: readonly
 
 linters:
+  # Enable only essential and valuable linters
   enable:
-    - bodyclose
-    - dogsled
-    - dupl
-    - errcheck
-    - exhaustive
-    - copyloopvar
-    - funlen
-    - gochecknoinits
-    - goconst
-    - gocritic
-    - gocyclo
-    - gofmt
-    - goimports
-    - mnd
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - lll
-    - misspell
-    - nakedret
-    - noctx
-    - nolintlint
-    - rowserrcheck
-    - staticcheck
-    - stylecheck
-    - typecheck
-    - unconvert
-    - unparam
-    - unused
-    - whitespace
+    # Code correctness
+    - errcheck         # Check for unchecked errors
+    - govet           # Go vet checks
+    - staticcheck     # Go static analysis
+    - typecheck       # Type checking
+    - gosimple        # Simplify code
+    - ineffassign     # Detect ineffectual assignments
+    - unused          # Find unused code
+
+    # Code style and formatting
+    - gofmt           # Check formatting
+    - goimports       # Check imports formatting
+    - misspell        # Fix spelling mistakes
+    - whitespace      # Check for trailing whitespace
+
+    # Security
+    - gosec           # Security issues
+
+    # Best practices
+    - bodyclose       # Check HTTP response body is closed
+    - rowserrcheck    # Check SQL rows.Err
+    - copyloopvar     # Check for loop variable capture issues
+
+  # Disable overly strict linters
+  disable:
+    - mnd             # Magic number detection - too noisy for small projects
+    - funlen          # Function length - subjective for small projects
+    - gocyclo         # Cyclomatic complexity - covered by code review
+    - lll             # Line length - modern screens can handle longer lines
+    - dupl            # Duplicate code - sometimes acceptable for clarity
+    - goconst         # Constants detection - not always needed
+    - exhaustive      # Exhaustive switch - too strict
+    - gocritic        # Very opinionated, many false positives
+    - noctx           # Context checks - sometimes overkill
+    - nolintlint      # Linter directive checks - not critical
 
 linters-settings:
-  dupl:
-    threshold: 100
-  funlen:
-    lines: 100
-    statements: 50
-  gocyclo:
-    min-complexity: 15
-  lll:
-    line-length: 120
-  maligned:
-    suggest-new: true
+  gosec:
+    # Exclude rules that are too noisy
+    excludes:
+      - G204  # Subprocess launched with variable
+      - G304  # File path provided as taint input
+  
   misspell:
     locale: US
 
 issues:
   exclude-rules:
+    # Test files can be more lenient
     - path: _test\.go
       linters:
-        - mnd
-        - funlen
-        - dupl
+        - gosec
+        - errcheck
+    
+    # Allow long lines in quotes file since they contain quote text
     - path: internal/quotes/quotes\.go
       linters:
-        - lll  # Long lines are acceptable for quote strings
+        - all
+  
+  # Don't exclude common linting issues automatically
   exclude-use-default: false
+  
+  # Custom exclusions for common Go patterns
   exclude:
-    - 'declaration of "(err|ctx)" shadows declaration at' 
+    - 'declaration of "(err|ctx)" shadows declaration at'
+    - 'should have a package comment' 

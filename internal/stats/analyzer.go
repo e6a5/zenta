@@ -11,6 +11,12 @@ import (
 	"github.com/e6a5/zenta/internal/models"
 )
 
+const (
+	HoursPerDay    = 24
+	StatsLineWidth = 40
+	MaxBarWidth    = 20
+)
+
 // Analyzer handles statistical analysis of log entries
 type Analyzer struct {
 	logs []*models.LogEntry
@@ -97,14 +103,14 @@ func (a *Analyzer) filterByPeriod(period string) []*models.LogEntry {
 
 	switch period {
 	case "today":
-		cutoff = now.Truncate(24 * time.Hour)
+		cutoff = now.Truncate(HoursPerDay * time.Hour)
 	case "week":
 		// Go back to start of week (Monday)
 		weekday := int(now.Weekday())
 		if weekday == 0 { // Sunday
 			weekday = 7
 		}
-		cutoff = now.AddDate(0, 0, -(weekday - 1)).Truncate(24 * time.Hour)
+		cutoff = now.AddDate(0, 0, -(weekday - 1)).Truncate(HoursPerDay * time.Hour)
 	case "month":
 		cutoff = time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
 	default:
@@ -127,7 +133,7 @@ func (a *Analyzer) FormatStats(result *StatsResult, period string) string {
 	var output strings.Builder
 
 	output.WriteString(fmt.Sprintf("📊 Zenta Statistics (%s)\n", period))
-	output.WriteString(strings.Repeat("─", 40))
+	output.WriteString(strings.Repeat("─", StatsLineWidth))
 	output.WriteString("\n\n")
 
 	if result.TotalEntries == 0 {
@@ -192,9 +198,8 @@ func (a *Analyzer) formatHourlyChart(hourly map[int]int) string {
 	})
 
 	// Generate bars (max width of 20 chars)
-	const maxBarWidth = 20
 	for _, h := range hours {
-		barWidth := (h.count * maxBarWidth) / maxCount
+		barWidth := (h.count * MaxBarWidth) / maxCount
 		if barWidth == 0 && h.count > 0 {
 			barWidth = 1 // Ensure at least one character for non-zero counts
 		}

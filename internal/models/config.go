@@ -2,6 +2,11 @@
 // It contains configuration, logging, and other fundamental data models.
 package models
 
+const (
+	DefaultTimerDuration = 45 // minutes
+	DefaultBreakDuration = 10 // minutes
+)
+
 // Config represents the user configuration for zenta
 type Config struct {
 	TimerDuration       int    `json:"timer_duration"` // in minutes
@@ -16,8 +21,8 @@ type Config struct {
 // DefaultConfig returns a configuration with sensible defaults
 func DefaultConfig() *Config {
 	return &Config{
-		TimerDuration:       45,
-		BreakDuration:       10,
+		TimerDuration:       DefaultTimerDuration,
+		BreakDuration:       DefaultBreakDuration,
 		SoundEnabled:        true,
 		NotificationMethod:  "message",
 		Timezone:            "auto",

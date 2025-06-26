@@ -12,10 +12,12 @@ import (
 )
 
 const (
-	ZentaDir   = ".zenta"
-	LogsFile   = "logs.json"
-	ConfigFile = "config.json"
-	QuotesFile = "quotes.txt"
+	DirPermissions  = 0750
+	FilePermissions = 0600
+	ZentaDir        = ".zenta"
+	LogsFile        = "logs.json"
+	ConfigFile      = "config.json"
+	QuotesFile      = "quotes.txt"
 )
 
 // Storage handles all file operations for zenta
@@ -55,7 +57,7 @@ func New() (*Storage, error) {
 // ensureZentaDir creates the ~/.zenta directory if it doesn't exist
 func (s *Storage) ensureZentaDir() error {
 	if _, err := os.Stat(s.zentaDir); os.IsNotExist(err) {
-		if err := os.MkdirAll(s.zentaDir, 0750); err != nil {
+		if err := os.MkdirAll(s.zentaDir, DirPermissions); err != nil {
 			return fmt.Errorf("unable to create zenta directory at %s: %w", s.zentaDir, err)
 		}
 	}
@@ -93,7 +95,7 @@ func (s *Storage) SaveLogs(logs []*models.LogEntry) error {
 		return fmt.Errorf("unable to marshal logs: %w", err)
 	}
 
-	if err := os.WriteFile(s.logsPath, data, 0600); err != nil {
+	if err := os.WriteFile(s.logsPath, data, FilePermissions); err != nil {
 		return fmt.Errorf("unable to write logs file: %w", err)
 	}
 
@@ -142,7 +144,7 @@ func (s *Storage) SaveConfig(config *models.Config) error {
 		return fmt.Errorf("unable to marshal config: %w", err)
 	}
 
-	if err := os.WriteFile(s.configPath, data, 0600); err != nil {
+	if err := os.WriteFile(s.configPath, data, FilePermissions); err != nil {
 		return fmt.Errorf("unable to write config file: %w", err)
 	}
 
