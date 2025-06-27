@@ -15,12 +15,14 @@ When your mind wanders while coding, simply return to breath. No tracking, no me
 git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
 
 # Set up zen aliases
-echo "alias breath='zenta now --silent --quick'" >> ~/.zshrc
-echo "alias breathe='zenta now --silent'" >> ~/.zshrc
+echo "alias breath='zenta now --quick'" >> ~/.zshrc
+echo "alias breathe='zenta now'" >> ~/.zshrc
+echo "alias reflect='zenta reflect'" >> ~/.zshrc
+source ~/.zshrc
 
 # Use instantly
-breath    # When mind wanders → return to breath (1 min)
-breathe   # Need deeper centering → longer session (3 min)  
+breath    # When mind wanders → return to breath (1 breath cycle)
+breathe   # Need deeper centering → longer session (3 breath cycles)  
 reflect   # Evening → gentle day review
 ```
 
@@ -73,14 +75,22 @@ $ breath
 
 ## 💡 Commands
 
-| Command | Purpose | Perfect For |
-|---------|---------|-------------|
-| `breath` | Quick return to presence (1 min) | Mind wandering moments |
-| `breathe` | Longer centering session (3 min) | Before difficult tasks |
-| `reflect` | Gentle evening review | End of day contemplation |
-| `zenta now` | Full session with wisdom quote | Regular practice |
+### **Essential Commands (with aliases)**
+| Command | Cycles | What It Does | Perfect For |
+|---------|--------|--------------|-------------|
+| `breath` | 1 cycle | Quick breathing + wisdom quote | Mind wandering moments |
+| `breathe` | 3 cycles | Standard breathing + wisdom quote | Before difficult tasks |
+| `reflect` | - | Gentle evening review | End of day contemplation |
 
-*Advanced options: `--quick`, `--extended`, `--silent`*
+### **Full Commands**
+| Command | Cycles | What It Does |
+|---------|--------|--------------|
+| `zenta now` | 3 cycles | Standard breathing + wisdom quote |
+| `zenta now --quick` | 1 cycle | Quick breathing + wisdom quote |
+| `zenta now --extended` | 5 cycles | Extended breathing + wisdom quote |
+| `zenta now --silent` | 3 cycles | Breathing only, no quote |
+
+**Mix options:** `zenta now --quick --silent` (1 cycle, no quote)
 
 ---
 
