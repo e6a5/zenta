@@ -41,7 +41,7 @@ We welcome contributions in:
 
 ### Prerequisites
 
-- Go 1.20 or later
+- Go 1.23 or later
 - Git
 - Make (optional, but recommended)
 

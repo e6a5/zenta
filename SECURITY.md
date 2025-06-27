@@ -10,7 +10,7 @@ The zenta team takes security seriously. We appreciate your efforts to responsib
 
 Instead, please report security vulnerabilities by email to:
 
-**security@zenta.dev** (or create a GitHub Security Advisory)
+Create a GitHub Security Advisory at https://github.com/e6a5/zenta/security/advisories
 
 Please include as much of the following information as possible:
 
@@ -47,8 +47,8 @@ zenta is designed with security in mind:
 - No external dependencies for core functionality
 
 **File System Access**
-- Only accesses `~/.zenta/` directory
-- Creates files with appropriate permissions (644 for data, 755 for directories)
+- Currently creates no persistent files or directories
+- All operations are stateless and in-memory only
 - Does not require elevated privileges
 
 **Input Validation**
@@ -57,9 +57,9 @@ zenta is designed with security in mind:
 - No shell command injection vulnerabilities
 
 **Dependencies**
-- Minimal external dependencies
-- Regular security audits of dependencies
-- Automated dependency scanning in CI/CD
+- Minimal external dependencies (only Go standard library)
+- Manual dependency reviews during development
+- No automated dependency scanning currently implemented
 
 ### Supported Versions
 
@@ -67,7 +67,9 @@ We provide security updates for the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
+| 0.3.x   | :white_check_mark: |
+| 0.2.x   | :x:                |
+| 0.1.x   | :x:                |
 
 ### Security Best Practices for Users
 
@@ -78,9 +80,9 @@ When using zenta:
    - Verify checksums when possible
    - Avoid third-party redistributions
 
-2. **File permissions**
-   - Ensure `~/.zenta/` has appropriate permissions
-   - Regularly back up your logs if they contain sensitive information
+2. **Privacy**
+   - zenta currently stores no persistent data
+   - All operations are performed in-memory only
 
 3. **System security**
    - Keep your operating system updated

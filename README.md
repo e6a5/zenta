@@ -165,7 +165,7 @@ Download the latest `.zip` file from [GitHub Releases](https://github.com/e6a5/z
 
 ### **Option 2: Build from Source**
 
-*Requires Go 1.21+ installed*
+*Requires Go 1.23+ installed*
 
 ```bash
 git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
