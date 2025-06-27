@@ -72,12 +72,42 @@ get_latest_release() {
     LATEST_RELEASE=$(curl -s "https://api.github.com/repos/${REPO}/releases/latest")
     if [ $? -ne 0 ]; then
         print_error "Failed to fetch release information"
+        print_warning "Please check your internet connection or try again later"
         exit 1
     fi
     
+    # Check if we got an error response
+    if echo "$LATEST_RELEASE" | grep -q '"message".*"Not Found"'; then
+        print_error "No releases found for this repository"
+        print_warning "Please download manually from: https://github.com/${REPO}/releases"
+        print_warning "Or build from source: git clone https://github.com/${REPO}.git && cd zenta && make install-system"
+        exit 1
+    fi
+    
+    # Try to extract version with multiple methods
     VERSION=$(echo "$LATEST_RELEASE" | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4)
+    
+    # Fallback method if first one fails
     if [ -z "$VERSION" ]; then
-        print_error "Could not determine latest version"
+        VERSION=$(echo "$LATEST_RELEASE" | sed -n 's/.*"tag_name":[[:space:]]*"\([^"]*\)".*/\1/p')
+    fi
+    
+    # Another fallback using jq-like parsing
+    if [ -z "$VERSION" ]; then
+        VERSION=$(echo "$LATEST_RELEASE" | tr ',' '\n' | grep '"tag_name"' | cut -d'"' -f4)
+    fi
+    
+    if [ -z "$VERSION" ]; then
+        print_error "Could not determine latest version from API response"
+        print_warning "This might be due to:"
+        print_warning "  - Network connectivity issues"
+        print_warning "  - GitHub API rate limiting"
+        print_warning "  - Unexpected API response format"
+        print_warning ""
+        print_warning "You can try:"
+        print_warning "  1. Wait a few minutes and try again"
+        print_warning "  2. Download manually: https://github.com/${REPO}/releases"
+        print_warning "  3. Build from source: git clone https://github.com/${REPO}.git && cd zenta && make install-system"
         exit 1
     fi
     
