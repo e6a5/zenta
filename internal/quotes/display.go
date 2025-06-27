@@ -13,8 +13,7 @@ import (
 func DisplayBeautifully(quote string) {
 	emoji, quoteText := parseQuoteEmoji(quote)
 	lines := wrapQuoteText(quoteText)
-	boxWidth := calculateBoxWidth(lines)
-	renderQuoteBoxWithTyping(lines, emoji, boxWidth)
+	renderQuoteWithoutBox(lines, emoji)
 }
 
 // parseQuoteEmoji extracts emoji from quote if present
@@ -53,59 +52,36 @@ func wrapQuoteText(quoteText string) []string {
 	return lines
 }
 
-// calculateBoxWidth calculates the width needed for the quote box
-func calculateBoxWidth(lines []string) int {
-	maxLen := 0
-	for _, line := range lines {
-		if len(line) > maxLen {
-			maxLen = len(line)
-		}
-	}
-	return maxLen + 8 // Add padding for borders and spacing
-}
-
-// renderQuoteBoxWithTyping renders the quote box with typing animation
-func renderQuoteBoxWithTyping(lines []string, emoji string, boxWidth int) {
+// renderQuoteWithoutBox renders a quote simply without box borders
+func renderQuoteWithoutBox(lines []string, emoji string) {
 	leftPadding := 4
 	padding := strings.Repeat(" ", leftPadding)
 
-	fmt.Printf("%s┌%s┐\n", padding, strings.Repeat("─", boxWidth-2))
+	fmt.Println() // Add spacing before quote
 
 	for i, line := range lines {
-		renderQuoteLineSimpleWithTyping(line, emoji, i == 0)
-	}
+		fmt.Print(padding)
 
-	fmt.Printf("%s└%s┘\n", padding, strings.Repeat("─", boxWidth-2))
-}
-
-// renderQuoteLineSimpleWithTyping renders a single line with typing animation
-func renderQuoteLineSimpleWithTyping(line, emoji string, isFirstLine bool) {
-	leftPadding := 4
-	padding := strings.Repeat(" ", leftPadding)
-
-	fmt.Printf("%s│ ", padding)
-
-	if isFirstLine {
-		fmt.Printf("%s ", emoji)
-	} else {
-		fmt.Print("  ") // Two spaces to align with emoji width
-	}
-
-	// Type out the line character by character
-	for _, char := range line {
-		fmt.Print(string(char))
-		if !unicode.IsSpace(char) {
-			time.Sleep(15 * time.Millisecond) // Slightly faster typing
+		if i == 0 {
+			fmt.Printf("%s ", emoji)
+		} else {
+			fmt.Print("  ") // Two spaces to align with emoji width
 		}
+
+		// Type out the line character by character - slower for zen effect
+		for _, char := range line {
+			fmt.Print(string(char))
+			if !unicode.IsSpace(char) {
+				time.Sleep(50 * time.Millisecond) // Slower, more contemplative typing
+			} else {
+				time.Sleep(20 * time.Millisecond) // Brief pause for spaces
+			}
+		}
+
+		fmt.Println()
 	}
 
-	// Add trailing spaces to fill the box width (simplified)
-	spaces := 40 - len(line) // Approximate trailing space
-	if spaces > 0 {
-		fmt.Print(strings.Repeat(" ", spaces))
-	}
-
-	fmt.Println(" │")
+	fmt.Println() // Add spacing after quote
 }
 
 // isEmoji checks if a rune is an emoji character
