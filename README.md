@@ -100,7 +100,7 @@ $ breath
 **Beautiful circles vs simple lines:**
 - **Most terminals**: Gorgeous expanding/contracting breathing circles
 - **macOS Terminal.app**: Auto-detects and uses simple line animation  
-- **tmux/screen**: Auto-detects and uses simple line animation
+- **tmux/screen**: Works great with complex animations
 
 **Force simple mode:** Add `--simple` to any command
 ```bash
@@ -108,7 +108,7 @@ breath --simple     # Force simple animation
 zenta now --simple  # Works with any options
 ```
 
-**Why?** Some terminals have ANSI escape sequence quirks. zenta auto-detects and adapts for the best experience.
+**Why?** Only macOS Terminal.app has ANSI escape sequence quirks. zenta auto-detects and adapts for the best experience.
 
 ---
 

@@ -115,9 +115,8 @@ func shouldUseSimpleAnimation() bool {
 		}
 	}
 
-	// Check for other terminals that might have issues
-	term := os.Getenv("TERM")
-	return strings.Contains(term, "screen") || strings.Contains(term, "tmux")
+	// Modern terminal multiplexers like tmux and screen handle complex animations fine
+	return false
 }
 
 // drawSimpleBreathingSession draws a simple line-based breathing animation for compatibility
