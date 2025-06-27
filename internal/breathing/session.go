@@ -4,6 +4,8 @@ package breathing
 
 import (
 	"fmt"
+	"os"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -18,23 +20,25 @@ const (
 
 // Session represents a breathing session configuration
 type Session struct {
-	Cycles    int
-	ShowQuote bool
-	InhaleDur int
-	HoldDur   int
-	ExhaleDur int
-	RestDur   time.Duration
+	Cycles     int
+	ShowQuote  bool
+	InhaleDur  int
+	HoldDur    int
+	ExhaleDur  int
+	RestDur    time.Duration
+	SimpleMode bool
 }
 
 // NewSession creates a new breathing session with default settings
 func NewSession() *Session {
 	return &Session{
-		Cycles:    3,
-		ShowQuote: true,
-		InhaleDur: 4,
-		HoldDur:   4,
-		ExhaleDur: 4,
-		RestDur:   RestDuration,
+		Cycles:     3,
+		ShowQuote:  true,
+		InhaleDur:  4,
+		HoldDur:    4,
+		ExhaleDur:  4,
+		RestDur:    RestDuration,
+		SimpleMode: false,
 	}
 }
 
@@ -48,6 +52,8 @@ func (s *Session) ParseArgs(args []string) {
 			s.Cycles = 5
 		case "--silent", "-s":
 			s.ShowQuote = false
+		case "--simple":
+			s.SimpleMode = true
 		}
 	}
 }
@@ -61,23 +67,111 @@ func (s *Session) Start() {
 	PrintWithPadding("   Let's breathe 🌸")
 	AddSectionSpacing()
 
-	// Reserve dedicated space for breathing visualization (12 lines)
-	fmt.Println() // Guidance text line
-	for i := 0; i < 10; i++ {
-		fmt.Println() // Circle area
+	// Use simple animation for better compatibility or if requested
+	if s.SimpleMode || shouldUseSimpleAnimation() {
+		s.drawSimpleBreathingSession()
+	} else {
+		// Reserve dedicated space for breathing visualization (12 lines)
+		fmt.Println() // Guidance text line
+		for i := 0; i < 10; i++ {
+			fmt.Println() // Circle area
+		}
+		fmt.Println() // Bottom buffer
+
+		// Move cursor back to start of breathing area
+		fmt.Print("\033[12A")
+
+		// One lung, multiple breaths
+		s.drawContinuousBreathingSession()
+
+		// Move cursor to end of breathing area
+		fmt.Print("\033[12B")
 	}
-	fmt.Println() // Bottom buffer
-
-	// Move cursor back to start of breathing area
-	fmt.Print("\033[12A")
-
-	// One lung, multiple breaths
-	s.drawContinuousBreathingSession()
-
-	// Move cursor to end of breathing area
-	fmt.Print("\033[12B")
 
 	AddSectionSpacing()
+}
+
+// shouldUseSimpleAnimation determines if we should use simple animation for compatibility
+func shouldUseSimpleAnimation() bool {
+	// Check if we're on macOS Terminal which has ANSI issues
+	if runtime.GOOS == "darwin" {
+		if term := os.Getenv("TERM_PROGRAM"); term == "Apple_Terminal" {
+			return true
+		}
+	}
+
+	// Check for other terminals that might have issues
+	if term := os.Getenv("TERM"); strings.Contains(term, "screen") || strings.Contains(term, "tmux") {
+		return true
+	}
+
+	return false
+}
+
+// drawSimpleBreathingSession draws a simple line-based breathing animation for compatibility
+func (s *Session) drawSimpleBreathingSession() {
+	for cycle := 1; cycle <= s.Cycles; cycle++ {
+		// Inhale phase
+		s.drawSimplePhase("🌬️", "Breathe in gently...", s.InhaleDur, []string{
+			"·", "○", "○○", "●○○", "●●○○", "●●●○", "●●●●",
+		})
+
+		// Hold phase
+		s.drawSimplePhase("✨", "Hold softly...", s.HoldDur, []string{
+			"●●●●", "●●●●", "●●●●", "●●●●",
+		})
+
+		// Exhale phase
+		s.drawSimplePhase("🌸", "Release slowly...", s.ExhaleDur, []string{
+			"●●●●", "●●●○", "●●○○", "●○○○", "○○○○", "○○", "·",
+		})
+
+		// Rest phase
+		s.drawSimplePhase("🕯️", "Rest in emptiness...", s.HoldDur, []string{
+			"·", "·", "·", "·",
+		})
+
+		// Brief pause between cycles
+		if cycle < s.Cycles {
+			PrintWithPadding("   💫 Feel the rhythm... continuing...")
+			time.Sleep(s.RestDur)
+			fmt.Println()
+		}
+	}
+
+	PrintWithPadding("   🙏 Complete")
+	fmt.Println()
+}
+
+// drawSimplePhase draws a single breathing phase with progressive animation
+func (s *Session) drawSimplePhase(emoji, instruction string, duration int, patterns []string) {
+	if checkForExit() {
+		return
+	}
+
+	// Show the phase instruction
+	PrintWithPadding(fmt.Sprintf("   %s %s", emoji, instruction))
+
+	// Reserve space for the animation
+	PrintWithPadding("      ")
+
+	// Animate through the duration
+	for second := 1; second <= duration; second++ {
+		// Choose pattern based on progress through the phase
+		patternIndex := (second - 1) * (len(patterns) - 1) / (duration - 1)
+		if patternIndex >= len(patterns) {
+			patternIndex = len(patterns) - 1
+		}
+		pattern := patterns[patternIndex]
+
+		// Go back up one line and overwrite the animation line
+		fmt.Print("\033[1A")
+		PrintWithPadding(fmt.Sprintf("      %s", pattern))
+
+		time.Sleep(time.Second)
+	}
+
+	fmt.Println() // Add spacing after phase
 }
 
 // ShouldShowQuote returns whether to show quote after breathing

@@ -89,8 +89,26 @@ $ breath
 | `zenta now --quick` | 1 cycle | Quick breathing + wisdom quote |
 | `zenta now --extended` | 5 cycles | Extended breathing + wisdom quote |
 | `zenta now --silent` | 3 cycles | Breathing only, no quote |
+| `zenta now --simple` | 3 cycles | Simple line animation (terminal compatibility) |
 
 **Mix options:** `zenta now --quick --silent` (1 cycle, no quote)
+
+---
+
+## 🔧 Terminal Compatibility
+
+**Beautiful circles vs simple lines:**
+- **Most terminals**: Gorgeous expanding/contracting breathing circles
+- **macOS Terminal.app**: Auto-detects and uses simple line animation  
+- **tmux/screen**: Auto-detects and uses simple line animation
+
+**Force simple mode:** Add `--simple` to any command
+```bash
+breath --simple     # Force simple animation
+zenta now --simple  # Works with any options
+```
+
+**Why?** Some terminals have ANSI escape sequence quirks. zenta auto-detects and adapts for the best experience.
 
 ---
 
