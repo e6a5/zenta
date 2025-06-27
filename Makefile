@@ -19,6 +19,15 @@ GOMOD=$(GOCMD) mod
 
 ## Build the binary
 build:
+	@command -v $(GOCMD) >/dev/null 2>&1 || { \
+		echo "❌ Go is not installed on your system."; \
+		echo ""; \
+		echo "🚀 Quick install options:"; \
+		echo "  1. Use pre-built binary: curl -fsSL https://raw.githubusercontent.com/e6a5/zenta/main/install.sh | bash"; \
+		echo "  2. Install Go first: https://golang.org/dl/"; \
+		echo ""; \
+		exit 1; \
+	}
 	$(GOBUILD) -ldflags="$(LDFLAGS)" -o $(BINARY_NAME) .
 
 ## Build for all platforms

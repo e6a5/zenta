@@ -11,8 +11,8 @@ When your mind wanders while coding, simply return to breath. No tracking, no me
 ## ⚡ Quick Start
 
 ```bash
-# Install
-git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
+# Install (one-liner)
+curl -fsSL https://raw.githubusercontent.com/e6a5/zenta/main/install.sh | bash
 
 # Set up zen aliases
 echo "alias breath='zenta now --quick'" >> ~/.zshrc
@@ -142,12 +142,36 @@ zenta now --simple  # Works with any options
 
 ## 🚀 Installation
 
+### **Option 1: Pre-built Binaries (Recommended)**
+
 **macOS/Linux:**
+```bash
+# Download and install the latest binary for your platform
+curl -s https://api.github.com/repos/e6a5/zenta/releases/latest \
+| grep "browser_download_url.*$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed 's/x86_64/amd64/')" \
+| cut -d '"' -f 4 \
+| xargs curl -L -o zenta.tar.gz \
+&& tar -xzf zenta.tar.gz \
+&& sudo mv zenta-* /usr/local/bin/zenta \
+&& rm zenta.tar.gz
+
+# Or download manually from GitHub Releases
+```
+
+**Windows:**
+Download the latest `.zip` file from [GitHub Releases](https://github.com/e6a5/zenta/releases), extract it, and add the executable to your PATH.
+
+**Manual Download:** [GitHub Releases](https://github.com/e6a5/zenta/releases) - Choose your platform
+
+### **Option 2: Build from Source**
+
+*Requires Go 1.21+ installed*
+
 ```bash
 git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
 ```
 
-**Pre-built binaries:** [GitHub Releases](https://github.com/e6a5/zenta/releases)
+**Install Go first:** [https://golang.org/dl/](https://golang.org/dl/)
 
 *Supports: Linux, macOS, Windows, FreeBSD (all architectures)*
 
