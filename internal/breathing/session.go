@@ -38,7 +38,7 @@ func NewSession() *Session {
 		HoldDur:    4,
 		ExhaleDur:  4,
 		RestDur:    RestDuration,
-		SimpleMode: false,
+		SimpleMode: shouldUseSimpleAnimation(),
 	}
 }
 
@@ -52,6 +52,8 @@ func (s *Session) ParseArgs(args []string) {
 			s.Cycles = 5
 		case "--silent", "-s":
 			s.ShowQuote = false
+		case "--complex":
+			s.SimpleMode = false
 		case "--simple":
 			s.SimpleMode = true
 		}
@@ -68,7 +70,7 @@ func (s *Session) Start() {
 	AddSectionSpacing()
 
 	// Use simple animation for better compatibility or if requested
-	if s.SimpleMode || shouldUseSimpleAnimation() {
+	if s.SimpleMode {
 		s.drawSimpleBreathingSession()
 	} else {
 		// Reserve dedicated space for breathing visualization (12 lines)
@@ -101,11 +103,8 @@ func shouldUseSimpleAnimation() bool {
 	}
 
 	// Check for other terminals that might have issues
-	if term := os.Getenv("TERM"); strings.Contains(term, "screen") || strings.Contains(term, "tmux") {
-		return true
-	}
-
-	return false
+	term := os.Getenv("TERM")
+	return strings.Contains(term, "screen") || strings.Contains(term, "tmux")
 }
 
 // drawSimpleBreathingSession draws a simple line-based breathing animation for compatibility
