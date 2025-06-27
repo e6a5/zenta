@@ -51,6 +51,7 @@ func HandleNow(args []string) {
 	session := breathing.NewSession()
 	session.ParseArgs(args)
 
+	defer session.HideCursor()()
 	session.Start()
 
 	if session.ShouldShowQuote() {
