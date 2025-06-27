@@ -5,6 +5,7 @@ package breathing
 import (
 	"fmt"
 	"os"
+	"os/signal"
 	"runtime"
 	"strings"
 	"time"
@@ -58,6 +59,18 @@ func (s *Session) ParseArgs(args []string) {
 			s.SimpleMode = true
 		}
 	}
+}
+
+func (s Session) HideCursor() func() {
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, sigint...)
+	fmt.Print("\033[?25l")
+	go func() {
+		s := <-sig
+		fmt.Println("\033[?25h")
+		sigexit(s)
+	}()
+	return func() { fmt.Println("\033[?25h") }
 }
 
 // Start begins the breathing session with visualization
