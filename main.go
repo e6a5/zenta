@@ -4,13 +4,17 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/e6a5/zenta/internal/cli"
 )
 
 func main() {
+	// Get the executable name from argv[0]
+	programName := filepath.Base(os.Args[0])
+	
 	if len(os.Args) < cli.MinArgs {
-		cli.ShowHelp()
+		cli.ShowHelp(programName)
 		return
 	}
 
@@ -22,10 +26,10 @@ func main() {
 	case "reflect":
 		cli.HandleReflect(os.Args[2:])
 	case "help":
-		cli.ShowHelp()
+		cli.ShowHelp(programName)
 	case "version", "--version", "-v":
-		cli.HandleVersion()
+		cli.HandleVersion(programName)
 	default:
-		cli.HandleUnknownCommand(command)
+		cli.HandleUnknownCommand(command, programName)
 	}
 }

@@ -14,13 +14,13 @@ import (
 const MinArgs = 2
 
 // ShowHelp displays the main help message
-func ShowHelp() {
-	fmt.Println("zenta - mindfulness for terminal users")
+func ShowHelp(programName string) {
+	fmt.Printf("%s - mindfulness for terminal users\n", programName)
 	fmt.Println()
 	fmt.Println("USAGE:")
-	fmt.Println("  zenta now [options]          Take a mindful breathing moment")
-	fmt.Println("  zenta reflect                End-of-day reflection on thought patterns")
-	fmt.Println("  zenta help                   Show this help message")
+	fmt.Printf("  %s now [options]          Take a mindful breathing moment\n", programName)
+	fmt.Printf("  %s reflect                End-of-day reflection on thought patterns\n", programName)
+	fmt.Printf("  %s help                   Show this help message\n", programName)
 	fmt.Println()
 	fmt.Println("NOW OPTIONS:")
 	fmt.Println("  --quick, -q                  Quick 1-cycle session")
@@ -29,17 +29,17 @@ func ShowHelp() {
 	fmt.Println("  --simple                     Simple line animation (for terminal compatibility)")
 	fmt.Println()
 	fmt.Println("EXAMPLES:")
-	fmt.Println("  zenta now                    Standard 3-cycle breathing session")
-	fmt.Println("  zenta now --quick            Quick 1-cycle breathing break")
-	fmt.Println("  zenta now --extended         Extended 5-cycle session")
-	fmt.Println("  zenta now --silent           Breathing without quote")
-	fmt.Println("  zenta now --simple           Simple animation (terminal compatibility)")
-	fmt.Println("  zenta reflect                Gentle end-of-day reflection")
+	fmt.Printf("  %s now                    Standard 3-cycle breathing session\n", programName)
+	fmt.Printf("  %s now --quick            Quick 1-cycle breathing break\n", programName)
+	fmt.Printf("  %s now --extended         Extended 5-cycle session\n", programName)
+	fmt.Printf("  %s now --silent           Breathing without quote\n", programName)
+	fmt.Printf("  %s now --simple           Simple animation (terminal compatibility)\n", programName)
+	fmt.Printf("  %s reflect                Gentle end-of-day reflection\n", programName)
 	fmt.Println()
 	fmt.Println("MINDFUL ALIASES:")
-	fmt.Println("  alias breath='zenta now --quick'")
-	fmt.Println("  alias breathe='zenta now'")
-	fmt.Println("  alias reflect='zenta reflect'")
+	fmt.Printf("  alias breath='%s now --quick'\n", programName)
+	fmt.Printf("  alias breathe='%s now'\n", programName)
+	fmt.Printf("  alias reflect='%s reflect'\n", programName)
 	fmt.Println()
 	fmt.Println("Learn more: https://github.com/e6a5/zenta")
 }
@@ -83,13 +83,13 @@ func HandleReflect(args []string) {
 }
 
 // HandleVersion handles version display
-func HandleVersion() {
-	fmt.Printf("zenta version %s\n", version.Version)
+func HandleVersion(programName string) {
+	fmt.Printf("%s version %s\n", programName, version.Version)
 }
 
 // HandleUnknownCommand handles unknown commands
-func HandleUnknownCommand(command string) {
+func HandleUnknownCommand(command string, programName string) {
 	fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
-	fmt.Fprintf(os.Stderr, "Run 'zenta help' for available commands.\n")
+	fmt.Fprintf(os.Stderr, "Run '%s help' for available commands.\n", programName)
 	os.Exit(1)
 }

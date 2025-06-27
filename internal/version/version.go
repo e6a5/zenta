@@ -40,3 +40,9 @@ func (i Info) String() string {
 	return fmt.Sprintf("zenta %s (%s) built with %s on %s for %s",
 		i.Version, i.GitCommit, i.GoVersion, i.BuildDate, i.Platform)
 }
+
+// StringWithProgramName returns version as a string with custom program name
+func (i Info) StringWithProgramName(programName string) string {
+	return fmt.Sprintf("%s %s (%s) built with %s on %s for %s",
+		programName, i.Version, i.GitCommit, i.GoVersion, i.BuildDate, i.Platform)
+}
