@@ -150,6 +150,9 @@ install_zenta() {
     # Make it executable
     chmod +x "$BINARY"
     
+    # Ensure /usr/local/bin exists
+    sudo mkdir -p /usr/local/bin
+    
     # Install to /usr/local/bin
     print_status "Installing zenta to /usr/local/bin..."
     if ! sudo mv "$BINARY" /usr/local/bin/zenta; then
