@@ -31,36 +31,31 @@ zenta now --extended
 ```bash
 $ zenta now --quick
 
-    🧘 Welcome to your mindful moment
-       Find a comfortable position... Quick session (1 cycle)
-       Press 'q' anytime to exit gracefully
+       Let's breathe 🌸
 
-       When ready, press [ENTER] to begin...
-       Let's breathe! 🌸
+    🌬️ Breathe in gently, let your body expand...
+                                                
+                      ○                         
+                    ○ · ○                       
+                     ···                        
+              ○ · · ·   · · · ○                
+                     ···                        
+                    ○ · ○                       
+                      ·                         
+                      ○                         
 
-       Cycle 1
-    🔴 🔵 🔵 🔵 🔵
-    🔴          🔴    🌬️ Inhale   [████] 4s
-    🔴          🔴
-    🔴          🔴
-    🟡 🟡 🟡 🟡 🔴
 
-       ✨ Perfect! You've completed your mindful moment
-       Here's wisdom to carry this calm with you:
-
-       ╭─────────────────────────────────────────────────────╮
-       │  🌊 The quieter you become, the more you are able  │
-       │                     to hear.                       │
-       │                                                    │
-       ╰─────────────────────────────────────────────────────╯
+    🌊 T h e   q u i e t e r   y o u   b e c o m e, 
+       t h e   m o r e   y o u   a r e   a b l e   t o   h e a r.
 ```
 
-### **Smart & Flexible**
+### **Organic & Natural**
 - **`--quick`** → 1-minute breathing break for busy moments
 - **`--extended`** → 5-minute deep session when you have time  
 - **`--silent`** → Pure breathing, no quotes for focused sessions
-- **Progress bars** → See exactly where you are in each breath
-- **User-paced** → Start when you're ready, exit gracefully anytime
+- **Breathing circle** → Organic visualization that expands and contracts like real breathing
+- **Immediate flow** → Starts instantly, no interruptions, pure focus
+- **Typing wisdom** → Quotes reveal word-by-word after breathing for contemplative moments
 
 ### **Built for Developers**
 ```bash
@@ -97,10 +92,10 @@ git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `zenta now` | Standard 3-cycle breathing session | Regular mindful breaks |
-| `zenta now --quick` | Quick 1-cycle session (1 min) | Between meetings, quick reset |
-| `zenta now --extended` | Deep 5-cycle session (5 min) | Start of day, end of sprint |
-| `zenta now --silent` | Breathing only, no quote | Pure focus, no distractions |
+| `zenta now` | Organic breathing circle with 3 continuous breaths | Regular mindful breaks |
+| `zenta now --quick` | Quick 1-breath session with typing wisdom | Between meetings, quick reset |
+| `zenta now --extended` | Deep 5-breath session for longer calm | Start of day, end of sprint |
+| `zenta now --silent` | Pure breathing circle, no quote | Pure focus, no distractions |
 | `zenta log "reason"` | Track awareness moments | Notice patterns, build habits |
 | `zenta stats` | View your mindfulness patterns | Weekly reflection, insights |
 

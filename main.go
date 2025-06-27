@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -114,69 +113,37 @@ func handleNow(args []string) {
 	// Add top spacing
 	fmt.Println()
 
-	// Welcome section with consistent left padding
-	printWithPadding("🧘 Welcome to your mindful moment")
-	if session.Cycles == 1 {
-		printWithPadding("   Find a comfortable position... Quick session (1 cycle)")
-	} else {
-		printWithPadding(fmt.Sprintf("   Find a comfortable position... %d breathing cycles", session.Cycles))
-	}
-	printWithPadding("   Press 'q' anytime to exit gracefully")
-
 	// Section spacing
-	addSectionSpacing()
 
-	// Enhanced preparation
-	printWithPadding("   When ready, press [ENTER] to begin...")
-	waitForUserReady()
-
-	// Gentle countdown with padding
-	for i := 3; i >= 1; i-- {
-		if checkForExit() {
-			return
-		}
-		fmt.Printf("%s   Starting in %d...\r", strings.Repeat(" ", LeftPadding), i)
-		time.Sleep(1 * time.Second)
-	}
-	printWithPadding("   Let's breathe! 🌸")
+	// Go straight into breathing - no interruptions
+	printWithPadding("   Let's breathe 🌸")
 
 	addSectionSpacing()
 
-	// Dynamic cycle headers based on session cycles
-	showCycleHeaders(session.Cycles)
-
-	// Reserve space for breathing visualization
-	for i := 0; i < 6; i++ {
-		fmt.Println()
+	// Reserve dedicated space for breathing visualization (12 lines)
+	fmt.Println() // Guidance text line
+	for i := 0; i < 10; i++ {
+		fmt.Println() // Circle area
 	}
-	fmt.Print("\033[6A")
+	fmt.Println() // Bottom buffer
 
-	// Enhanced breathing cycles
-	for cycle := 1; cycle <= session.Cycles; cycle++ {
-		if checkForExit() {
-			return
-		}
-		drawEnhancedBreathingCycle(cycle, session)
-		if cycle < session.Cycles {
-			showRestPause()
-		}
-	}
+	// Move cursor back to start of breathing area
+	fmt.Print("\033[12A")
 
-	fmt.Print("\033[6B")
+	// One lung, multiple breaths
+	drawContinuousBreathingSession(session)
 
-	// Completion section with spacing
+	// Move cursor to end of breathing area
+	fmt.Print("\033[12B")
+
+	// Completion section with minimal design
 	addSectionSpacing()
-	printWithPadding("   ✨ Perfect! You've completed your mindful moment")
 
 	if session.ShowQuote {
-		addSectionSpacing()
-		printWithPadding("   Here's wisdom to carry this calm with you:")
-		fmt.Println()
 		quoteService := quotes.New()
 		quote := quoteService.GetRandomQuote()
 		displayQuoteBeautifully(quote)
 	} else {
-		addSectionSpacing()
 		printWithPadding("   Carry this calm with you throughout your day 🙏")
 	}
 
@@ -209,11 +176,6 @@ func parseNowArgs(args []string) *BreathingSession {
 	return session
 }
 
-// waitForUserReady waits for user to press ENTER
-func waitForUserReady() {
-	_, _ = bufio.NewReader(os.Stdin).ReadBytes('\n')
-}
-
 // checkForExit checks if user pressed 'q' to exit (simplified for now)
 func checkForExit() bool {
 	// For now, we'll implement a simple version
@@ -221,102 +183,188 @@ func checkForExit() bool {
 	return false
 }
 
-// showCycleHeaders displays dynamic cycle headers based on session configuration
-func showCycleHeaders(cycles int) {
-	headerText := ""
-	for i := 1; i <= cycles && i <= 5; i++ { // Limit display to 5 cycles
-		if i == 1 {
-			headerText += fmt.Sprintf("Cycle %d", i)
-		} else {
-			headerText += fmt.Sprintf("        Cycle %d", i)
-		}
-	}
-	printWithPadding("   " + headerText)
-	fmt.Println()
-}
-
-// drawEnhancedBreathingCycle draws an improved breathing cycle with progress bars
-func drawEnhancedBreathingCycle(cycleNum int, session *BreathingSession) {
-	// Calculate horizontal offset with proper spacing for multiple cycles
-	xOffset := (cycleNum - 1) * CycleSpacing
-
-	// Highlight current cycle
-	highlightCurrentCycle(cycleNum)
-
-	// Enhanced breathing phases with progress visualization
+// drawContinuousBreathingSession draws one lung breathing continuously through multiple cycles
+func drawContinuousBreathingSession(session *BreathingSession) {
+	// Breathing phases that feel natural
 	phases := []struct {
 		name        string
 		emoji       string
 		duration    int
 		instruction string
-		dot         string
+		breathType  string
 	}{
-		{"inhale", "🌬️", session.InhaleDur, "Breathe IN slowly and deeply...", "🔵"},
-		{"hold", "⏸️", session.HoldDur, "Hold your breath gently...", "🔴"},
-		{"exhale", "💨", session.ExhaleDur, "Breathe OUT slowly, release all tension...", "🟡"},
-		{"hold", "⏸️", session.HoldDur, "Hold empty, stay present...", "🔴"},
+		{"inhale", "🌬️", session.InhaleDur, "Breathe in gently, let your body expand...", "expand"},
+		{"hold", "✨", session.HoldDur, "Hold softly, feel the fullness...", "full"},
+		{"exhale", "🌸", session.ExhaleDur, "Release slowly, let everything go...", "contract"},
+		{"rest", "🕯️", session.HoldDur, "Rest in the emptiness, be present...", "empty"},
 	}
 
-	for phaseIdx, phase := range phases {
-		showEnhancedPhaseInstruction(phase.emoji, phase.instruction)
-
-		for i := 1; i <= phase.duration; i++ {
+	// One lung, breathing continuously through all cycles
+	for cycle := 1; cycle <= session.Cycles; cycle++ {
+		for _, phase := range phases {
 			if checkForExit() {
 				return
 			}
 
-			// Draw progress bar instead of just dots
-			showBreathingProgress(phase.emoji, phase.name, i, phase.duration)
+			// Show gentle guidance for each phase
+			showBreathingGuidance(phase.emoji, phase.name, phase.instruction)
 
-			// Still draw the box dots for visual continuity
-			var row, col int
-			switch phaseIdx {
-			case 0: // inhale - top edge
-				row, col = 0, xOffset+i*DotSpacing
-			case 1: // hold - right edge
-				row, col = i, xOffset+BoxWidth
-			case 2: // exhale - bottom edge
-				row, col = BoxHeight, xOffset+BoxWidth-i*DotSpacing
-			case 3: // hold - left edge
-				row, col = BoxHeight-i, xOffset
-			}
+			// Animate the same breathing circle for this phase
+			animateBreathingCircle(phase.breathType, phase.duration)
+		}
 
-			drawDotAtPosition(row, col, phase.dot)
-			time.Sleep(1 * time.Second)
+		// Brief pause between breathing cycles (not a separate "rest" phase)
+		if cycle < session.Cycles {
+			showBreathingGuidance("💫", "rest", "Feel the rhythm... continuing...")
+			time.Sleep(session.RestDur)
 		}
 	}
 
-	clearInstructionLine()
+	clearBreathingDisplay()
 }
 
-// showEnhancedPhaseInstruction shows breathing phase with better formatting
-func showEnhancedPhaseInstruction(emoji, instruction string) {
-	fmt.Print("\033[s")  // Save cursor position
-	fmt.Print("\033[7B") // Move to instruction line
-	fmt.Print("\r")
-	fmt.Printf("%s   %s  %s", strings.Repeat(" ", LeftPadding), emoji, instruction)
-	fmt.Print(strings.Repeat(" ", ClearLineWidth))
-	fmt.Print("\033[u") // Restore cursor position
-}
-
-// showBreathingProgress shows a progress bar for the current breathing phase
-func showBreathingProgress(emoji, phase string, current, total int) {
-	fmt.Print("\033[s")  // Save cursor position
-	fmt.Print("\033[8B") // Move below instruction line
-	fmt.Print("\r")
-
-	// Create progress bar
-	filled := strings.Repeat("█", current)
-	empty := strings.Repeat("░", total-current)
-	progress := fmt.Sprintf("[%s%s]", filled, empty)
-
-	// Show phase name and progress with left padding
-	// Capitalize first letter of phase name
-	capitalizedPhase := strings.ToUpper(phase[:1]) + phase[1:]
-	fmt.Printf("%s   %s %-8s %s %ds", strings.Repeat(" ", LeftPadding), emoji, capitalizedPhase, progress, total-current+1)
+// showBreathingGuidance shows gentle, non-technical breathing guidance
+func showBreathingGuidance(emoji, phase, instruction string) {
+	fmt.Print("\033[s") // Save cursor position
+	// Move to guidance line (current line)
+	fmt.Print("\r") // Go to beginning of line
+	fmt.Printf("%s   %s %s", strings.Repeat(" ", LeftPadding), emoji, instruction)
 	fmt.Print(strings.Repeat(" ", 20)) // Clear rest of line
+	fmt.Print("\033[u")                // Restore cursor position
+}
 
+// animateBreathingCircle creates an organic breathing circle that expands/contracts
+func animateBreathingCircle(breathType string, duration int) {
+	// Position circle in the center of the reserved area (relative to current cursor)
+	centerRowOffset := 5          // 5 lines down from guidance text
+	centerCol := LeftPadding + 25 // Centered position
+
+	for second := 1; second <= duration; second++ {
+		if checkForExit() {
+			return
+		}
+
+		// Calculate circle size based on breath type and progress
+		var circleSize int
+		var circleChar string
+
+		switch breathType {
+		case "expand": // Inhale - circle grows
+			progress := float64(second) / float64(duration)
+			circleSize = int(1 + progress*3) // Size 1-4
+			circleChar = "○"
+		case "full": // Hold full - circle stays large with gentle pulse
+			circleSize = 4
+			if second%2 == 0 {
+				circleChar = "●"
+			} else {
+				circleChar = "○"
+			}
+		case "contract": // Exhale - circle shrinks
+			progress := float64(duration-second+1) / float64(duration)
+			circleSize = int(1 + progress*3) // Size 4-1
+			circleChar = "○"
+		case "empty": // Hold empty - small circle with gentle pulse
+			circleSize = 1
+			if second%2 == 0 {
+				circleChar = "·"
+			} else {
+				circleChar = "○"
+			}
+		}
+
+		// Clear previous circle using relative positioning
+		clearCircleAreaRelative(centerRowOffset, centerCol)
+
+		// Draw the breathing circle using relative positioning
+		drawBreathingCircleRelative(centerRowOffset, centerCol, circleSize, circleChar)
+
+		time.Sleep(1 * time.Second)
+	}
+}
+
+// clearCircleAreaRelative clears the area where the breathing circle is drawn using relative positioning
+func clearCircleAreaRelative(rowOffset, centerCol int) {
+	fmt.Print("\033[s") // Save cursor position
+	for row := rowOffset - 4; row <= rowOffset+4; row++ {
+		fmt.Printf("\033[%dB", row)        // Move to row
+		fmt.Print("\r")                    // Go to beginning of line
+		fmt.Print(strings.Repeat(" ", 80)) // Clear entire line
+		fmt.Print("\033[u")                // Restore position
+		fmt.Print("\033[s")                // Save again for next iteration
+	}
+	fmt.Print("\033[u") // Final restore
+}
+
+// drawBreathingCircleRelative draws a circular breathing pattern using relative positioning
+func drawBreathingCircleRelative(rowOffset, centerCol, size int, char string) {
+	if size <= 1 {
+		// Small circle - just center point
+		drawAtPositionRelative(rowOffset, centerCol, char)
+		return
+	}
+
+	// Draw concentric circles for larger sizes
+	for radius := 1; radius <= size; radius++ {
+		// Calculate positions for circle points
+		points := []struct{ row, col int }{
+			{rowOffset - radius, centerCol},   // top
+			{rowOffset + radius, centerCol},   // bottom
+			{rowOffset, centerCol - radius*2}, // left (wider for terminal)
+			{rowOffset, centerCol + radius*2}, // right
+		}
+
+		// Add diagonal points for larger circles
+		if radius > 1 {
+			diag := int(float64(radius) * 0.7) // Approximate diagonal distance
+			points = append(points, []struct{ row, col int }{
+				{rowOffset - diag, centerCol - diag}, // top-left
+				{rowOffset - diag, centerCol + diag}, // top-right
+				{rowOffset + diag, centerCol - diag}, // bottom-left
+				{rowOffset + diag, centerCol + diag}, // bottom-right
+			}...)
+		}
+
+		// Draw all points for this radius
+		circleChar := char
+		if radius < size {
+			circleChar = "·" // Fainter for inner circles
+		}
+
+		for _, point := range points {
+			drawAtPositionRelative(point.row, point.col, circleChar)
+		}
+	}
+}
+
+// drawAtPositionRelative draws a character at a position relative to current cursor
+func drawAtPositionRelative(rowOffset, col int, char string) {
+	fmt.Print("\033[s") // Save cursor position
+
+	// Move relative to current position
+	if rowOffset > 0 {
+		fmt.Printf("\033[%dB", rowOffset) // Move down
+	} else if rowOffset < 0 {
+		fmt.Printf("\033[%dA", -rowOffset) // Move up
+	}
+
+	// Move to column position
+	fmt.Print("\r") // Go to beginning of line
+	if col > 0 {
+		fmt.Printf("\033[%dC", col) // Move right
+	}
+
+	fmt.Print(char)
 	fmt.Print("\033[u") // Restore cursor position
+}
+
+// clearBreathingDisplay clears the breathing visualization area
+func clearBreathingDisplay() {
+	// Clear the guidance line
+	fmt.Print("\033[s")                // Save cursor position
+	fmt.Print("\r")                    // Go to beginning of line
+	fmt.Print(strings.Repeat(" ", 80)) // Clear line
+	fmt.Print("\033[u")                // Restore cursor position
 }
 
 // Padding and spacing helper functions
@@ -334,91 +382,6 @@ func addBottomPadding() {
 	for i := 0; i < BottomPadding; i++ {
 		fmt.Println()
 	}
-}
-
-func highlightCurrentCycle(currentCycle int) {
-	// Save cursor position
-	fmt.Print("\033[s")
-
-	// Move to cycle labels line
-	fmt.Print("\033[7A")
-	fmt.Print("\r")
-
-	// Show cycles dynamically based on what's displayed with proper padding
-	fmt.Print(strings.Repeat(" ", LeftPadding))
-	fmt.Print("   ") // Additional indent for cycle headers
-
-	maxDisplay := 5 // Maximum cycles to display in headers
-	for i := 1; i <= maxDisplay; i++ {
-		if i > 1 {
-			fmt.Print("        ")
-		}
-		switch {
-		case i == currentCycle:
-			fmt.Printf("▶ Cycle %d ◀", i)
-		case i < currentCycle:
-			fmt.Printf("✓ Cycle %d", i)
-		default:
-			fmt.Printf("Cycle %d", i)
-		}
-	}
-
-	// Restore cursor position
-	fmt.Print("\033[u")
-}
-
-func showPhaseInstruction(instruction string) {
-	// Save cursor position
-	fmt.Print("\033[s")
-
-	// Move to instruction line (below the boxes)
-	fmt.Print("\033[7B")
-	fmt.Print("\r")
-	fmt.Print(instruction)
-	fmt.Print(strings.Repeat(" ", ClearLineWidth)) // Clear rest of line
-
-	// Restore cursor position
-	fmt.Print("\033[u")
-}
-
-func clearInstructionLine() {
-	// Save cursor position
-	fmt.Print("\033[s")
-
-	// Move to instruction line and clear it
-	fmt.Print("\033[7B")
-	fmt.Print("\r")
-	fmt.Print(strings.Repeat(" ", StatusLineWidth))
-
-	// Restore cursor position
-	fmt.Print("\033[u")
-}
-
-func showRestPause() {
-	showPhaseInstruction("💫 Rest between cycles... feel the calm...")
-	time.Sleep(RestDuration)
-	clearInstructionLine()
-}
-
-func drawDotAtPosition(row, col int, dot string) {
-	// Save current cursor position
-	fmt.Print("\033[s")
-
-	// Move to specific position relative to current cursor
-	if row > 0 {
-		fmt.Printf("\033[%dB", row) // Move down
-	}
-	// Add left padding to column position
-	totalCol := LeftPadding + col
-	if totalCol > 0 {
-		fmt.Printf("\033[%dC", totalCol) // Move right with padding
-	}
-
-	// Draw the dot
-	fmt.Print(dot)
-
-	// Restore cursor position
-	fmt.Print("\033[u")
 }
 
 func handleLog(args []string) {
@@ -569,7 +532,7 @@ func displayQuoteBeautifully(quote string) {
 	emoji, quoteText := parseQuoteEmoji(quote)
 	lines := wrapQuoteText(quoteText)
 	boxWidth := calculateBoxWidth(lines)
-	renderQuoteBox(lines, emoji, boxWidth)
+	renderQuoteBoxWithTyping(lines, emoji, boxWidth)
 }
 
 func parseQuoteEmoji(quote string) (string, string) {
@@ -622,67 +585,47 @@ func calculateBoxWidth(lines []string) int {
 	return boxWidth
 }
 
-func renderQuoteBox(lines []string, emoji string, boxWidth int) {
+func renderQuoteBoxWithTyping(lines []string, emoji string, boxWidth int) {
 	fmt.Println()
 
-	// Top border
-	renderBorderLine("╭", "─", "╮", boxWidth)
-
-	// Empty line
-	renderEmptyLine(boxWidth)
-
-	// Quote lines with emoji
+	// Simple quote display without box borders
 	for i, line := range lines {
-		renderQuoteLine(line, emoji, i == 0, boxWidth)
+		renderQuoteLineSimpleWithTyping(line, emoji, i == 0)
 	}
 
-	// Empty line
-	renderEmptyLine(boxWidth)
-
-	// Bottom border
-	renderBorderLine("╰", "─", "╯", boxWidth)
 	fmt.Println()
 }
 
-func renderBorderLine(left, middle, right string, width int) {
+func renderQuoteLineSimpleWithTyping(line, emoji string, isFirstLine bool) {
+	// Start the line with proper padding
 	fmt.Printf("%s   ", strings.Repeat(" ", LeftPadding))
-	fmt.Print(left + strings.Repeat(middle, width) + right)
-	fmt.Println()
-}
 
-func renderEmptyLine(boxWidth int) {
-	fmt.Printf("%s   ", strings.Repeat(" ", LeftPadding))
-	fmt.Print("│" + strings.Repeat(" ", boxWidth) + "│")
-	fmt.Println()
-}
-
-func renderQuoteLine(line, emoji string, isFirstLine bool, boxWidth int) {
-	fmt.Printf("%s   ", strings.Repeat(" ", LeftPadding))
-	fmt.Print("│  ")
-
-	// Add emoji to first line
-	displayLine := line
+	// Type out the emoji first (if any)
 	if isFirstLine && emoji != "" {
-		displayLine = emoji + " " + line
+		fmt.Print(emoji)
+		time.Sleep(200 * time.Millisecond)
+		fmt.Print(" ")
+		time.Sleep(100 * time.Millisecond)
 	}
 
-	// Center the text safely
-	availableSpace := boxWidth - QuoteBorderPadding
-	padding := (availableSpace - len(displayLine)) / CenterDivisor
-	if padding < 0 {
-		padding = 0
+	// Type out each word with a pause
+	words := strings.Fields(line)
+	for i, word := range words {
+		if i > 0 {
+			fmt.Print(" ")
+			time.Sleep(50 * time.Millisecond)
+		}
+
+		// Type each character in the word
+		for _, char := range word {
+			fmt.Print(string(char))
+			time.Sleep(80 * time.Millisecond)
+		}
+
+		// Brief pause between words
+		time.Sleep(150 * time.Millisecond)
 	}
 
-	fmt.Print(strings.Repeat(" ", padding))
-	fmt.Print(displayLine)
-
-	// Right padding
-	rightPadding := availableSpace - len(displayLine) - padding
-	if rightPadding < 0 {
-		rightPadding = 0
-	}
-	fmt.Print(strings.Repeat(" ", rightPadding))
-	fmt.Print("  │")
 	fmt.Println()
 }
 
