@@ -12,7 +12,7 @@ import (
 func main() {
 	// Get the executable name from argv[0]
 	programName := filepath.Base(os.Args[0])
-	
+
 	if len(os.Args) < cli.MinArgs {
 		cli.ShowHelp(programName)
 		return
