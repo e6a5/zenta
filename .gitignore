@@ -40,3 +40,6 @@ Thumbs.db
 
 ./zenta
 coverage.*
+
+# Nix build directory
+result
