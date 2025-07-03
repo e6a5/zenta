@@ -5,9 +5,11 @@ package cli
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/e6a5/zenta/internal/breathing"
 	"github.com/e6a5/zenta/internal/quotes"
+	"github.com/e6a5/zenta/internal/reflection"
 	"github.com/e6a5/zenta/internal/version"
 )
 
@@ -66,21 +68,41 @@ func HandleNow(args []string) {
 
 // HandleReflect handles the 'reflect' command for mindful reflection
 func HandleReflect(args []string) {
-	breathing.PrintWithPadding("🕯️  Evening Reflection")
+	prompts := reflection.GetDefaultPrompts()
+
+	// Begin the session
+	breathing.PrintWithPadding(prompts.Title)
+	time.Sleep(1 * time.Second)
 	breathing.AddSectionSpacing()
 
-	breathing.PrintWithPadding("   Close your eyes for a moment...")
-	breathing.PrintWithPadding("   Take three deep breaths...")
+	// Guide through initial instructions with pauses
+	for i, line := range prompts.Instructions {
+		breathing.PrintWithPadding(line)
+		// Give more time for the last instruction (taking breaths)
+		if i == len(prompts.Instructions)-1 {
+			time.Sleep(5 * time.Second)
+		} else {
+			time.Sleep(3 * time.Second)
+		}
+	}
 	breathing.AddSectionSpacing()
 
-	breathing.PrintWithPadding("   📝 Gentle reflection:")
-	breathing.PrintWithPadding("      • What thoughts kept pulling you away today?")
-	breathing.PrintWithPadding("      • Were there moments when you were truly present?")
-	breathing.PrintWithPadding("      • What patterns do you notice in your mind?")
+	// Introduce the reflection prompts
+	breathing.PrintWithPadding(prompts.PromptTitle)
+	time.Sleep(2 * time.Second)
+
+	// Display each prompt with a long pause for contemplation
+	for _, line := range prompts.Prompts {
+		breathing.PrintWithPadding(line)
+		time.Sleep(8 * time.Second)
+	}
 	breathing.AddSectionSpacing()
 
-	breathing.PrintWithPadding("   These are just thoughts. They come and go like clouds.")
-	breathing.PrintWithPadding("   The noticing itself is the practice. 🙏")
+	// Display the closing thoughts with pauses
+	for _, line := range prompts.Closing {
+		breathing.PrintWithPadding(line)
+		time.Sleep(3 * time.Second)
+	}
 	breathing.AddBottomPadding()
 }
 
