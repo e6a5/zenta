@@ -134,7 +134,7 @@ func (s *Session) drawSimpleBreathingSession() {
 
 		// Exhale phase
 		s.drawSimplePhase("🌸", "Release slowly...", s.ExhaleDur, []string{
-			"●●●●", "●●●○", "●●○○", "●○○○", "○○○○", "○○", "·",
+			"●●●●", "●●●○", "●●○○", "●○○○", "○○○○", "○○  ", "○   ",
 		})
 
 		// Rest phase
