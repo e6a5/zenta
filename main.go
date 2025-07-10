@@ -23,6 +23,8 @@ func main() {
 	switch command {
 	case "now":
 		cli.HandleNow(os.Args[2:])
+	case "anchor":
+		cli.HandleAnchor(os.Args[2:])
 	case "reflect":
 		cli.HandleReflect(os.Args[2:])
 	case "help":

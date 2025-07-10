@@ -21,6 +21,7 @@ func ShowHelp(programName string) {
 	fmt.Println()
 	fmt.Println("USAGE:")
 	fmt.Printf("  %s now [options]         Take a mindful breathing moment\n", programName)
+	fmt.Printf("  %s anchor                Guided breathing anchor\n", programName)
 	fmt.Printf("  %s reflect               End-of-day reflection on thought patterns\n", programName)
 	fmt.Printf("  %s help                  Show this help message\n", programName)
 	fmt.Println()
@@ -37,6 +38,7 @@ func ShowHelp(programName string) {
 	fmt.Printf("  %s now --extended        Extended 5-cycle session\n", programName)
 	fmt.Printf("  %s now --silent          Breathing without quote\n", programName)
 	fmt.Printf("  %s now --simple          Simple animation (terminal compatibility)\n", programName)
+	fmt.Printf("  %s anchor                Anchor your breath to the present moment\n", programName)
 	fmt.Printf("  %s reflect               Gentle end-of-day reflection\n", programName)
 	fmt.Println()
 	fmt.Println("MINDFUL ALIASES:")
@@ -64,6 +66,20 @@ func HandleNow(args []string) {
 	}
 
 	breathing.AddBottomPadding()
+}
+
+// HandleAnchor handles the 'anchor' command for the interactive pacer.
+func HandleAnchor(args []string) {
+	session := breathing.NewSession()
+	session.StartAnchor()
+
+	// Show a quote after the session, unless it was silent.
+	// This check is a placeholder for future flags, e.g., --breathe-silent
+	if session.ShouldShowQuote() {
+		quoteService := quotes.New()
+		quote := quoteService.GetRandomQuote()
+		quotes.DisplayBeautifully(quote)
+	}
 }
 
 // HandleReflect handles the 'reflect' command for mindful reflection
