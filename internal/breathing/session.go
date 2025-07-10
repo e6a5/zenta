@@ -8,7 +8,10 @@ import (
 	"os/signal"
 	"runtime"
 	"strings"
+	"syscall"
 	"time"
+
+	"golang.org/x/term"
 )
 
 // Constants for breathing visualization
@@ -28,6 +31,16 @@ type Session struct {
 	ExhaleDur  int
 	RestDur    time.Duration
 	SimpleMode bool
+}
+
+// sigint defines the signals to listen for to restore the cursor.
+// It's a variable to allow for different signals on different OSes,
+// though currently it's the same for all.
+var sigint = []os.Signal{syscall.SIGINT, syscall.SIGTERM}
+
+// sigexit handles the process of exiting gracefully.
+func sigexit(s os.Signal) {
+	os.Exit(0)
 }
 
 // NewSession creates a new breathing session with default settings
@@ -392,4 +405,143 @@ func AddBottomPadding() {
 	for i := 0; i < BottomPadding; i++ {
 		fmt.Println()
 	}
+}
+
+// StartAnchor provides an immediate, intuitive manual breathing session.
+func (s *Session) StartAnchor() {
+	// Hide cursor and restore on exit
+	defer s.HideCursor()()
+
+	fmt.Println()
+	PrintWithPadding("   🌸")
+	PrintWithPadding("   Let the rhythm guide you. [SPACE] to switch phase, [q] to quit.")
+	fmt.Println()
+
+	if err := s.runAnchorBreathing(); err != nil {
+		// If real-time mode fails, print an informative error.
+		PrintWithPadding("Error: This terminal does not support this mode.")
+		PrintWithPadding("The 'zenta now' command is a great alternative.")
+		fmt.Println()
+		return
+	}
+
+	// Clean up the final line of the visualizer and add mindful spacing.
+	fmt.Print("\r" + strings.Repeat(" ", 80) + "\r")
+	PrintWithPadding("   🙏 Carry this calm with you.")
+	AddBottomPadding()
+}
+
+// runAnchorBreathing sets up the terminal and runs the new pacer logic.
+func (s *Session) runAnchorBreathing() error {
+	fd := int(os.Stdin.Fd())
+	if !term.IsTerminal(fd) {
+		return fmt.Errorf("stdin is not a terminal")
+	}
+
+	// Switch to raw mode to read single key presses.
+	oldState, err := term.MakeRaw(fd)
+	if err != nil {
+		return err
+	}
+	// Ensure the terminal state is always restored.
+	defer func() {
+		if err := term.Restore(fd, oldState); err != nil {
+			fmt.Fprintf(os.Stderr, "Error restoring terminal: %v\n", err)
+		}
+	}()
+
+	var (
+		breathSize int
+		maxSize    = 40
+		phase      = "inhale" // "inhale", "exhale", or "paused"
+		keyPress   = make(chan byte, 1)
+	)
+
+	// Goroutine to read key presses.
+	go func() {
+		defer close(keyPress)
+		for {
+			buffer := make([]byte, 1)
+			if count, err := os.Stdin.Read(buffer); err != nil || count == 0 {
+				return
+			}
+			keyPress <- buffer[0]
+		}
+	}()
+
+	// The main animation loop.
+	for {
+		// 1. Check for user input to change phase.
+		select {
+		case key, ok := <-keyPress:
+			if !ok {
+				return nil // Channel closed.
+			}
+			switch key {
+			case ' ':
+				if phase == "inhale" {
+					phase = "exhale" // Switch to exhaling.
+				} else if phase == "paused" {
+					phase = "inhale" // Start new cycle from paused state.
+				}
+			case 'q', 'Q', 3: // Ctrl+C
+				return nil
+			}
+		default:
+			// No input, continue the current phase.
+		}
+
+		// 2. Update the breath size based on the current phase.
+		switch phase {
+		case "inhale":
+			if breathSize < maxSize {
+				breathSize++
+			}
+		case "exhale":
+			if breathSize > 0 {
+				breathSize--
+			} else {
+				phase = "paused" // Breath is empty, wait for user.
+			}
+		case "paused":
+			// Do nothing, wait for the user to press space.
+		}
+
+		// 3. Render the visual and pause.
+		s.drawBreathingVisual(breathSize, maxSize, phase)
+		time.Sleep(90 * time.Millisecond) // Slower, more calming pace.
+	}
+}
+
+// drawBreathingVisual renders a simple, minimalist line of dots.
+func (s *Session) drawBreathingVisual(size, visualMaxWidth int, phase string) {
+	var bar strings.Builder
+	bar.WriteString(strings.Repeat(" ", LeftPadding)) // Indent
+
+	// Display the current phase, padded for alignment.
+	phaseText := fmt.Sprintf("%-8s", phase)
+	bar.WriteString(phaseText)
+	bar.WriteString(" [")
+
+	displaySize := size
+	if displaySize > visualMaxWidth {
+		displaySize = visualMaxWidth
+	}
+
+	for i := 0; i < displaySize; i++ {
+		bar.WriteString("●")
+	}
+
+	if displaySize < visualMaxWidth {
+		bar.WriteString("○")
+	}
+
+	for i := 0; i < visualMaxWidth-displaySize-1; i++ {
+		bar.WriteString("·")
+	}
+
+	bar.WriteString("]")
+
+	// Overwrite the current line with the new visual.
+	fmt.Print("\r" + bar.String() + " ")
 }

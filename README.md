@@ -17,12 +17,14 @@ curl -fsSL https://raw.githubusercontent.com/e6a5/zenta/main/install.sh | bash
 # Set up zen aliases
 echo "alias breath='zenta now --quick'" >> ~/.zshrc
 echo "alias breathe='zenta now'" >> ~/.zshrc
+echo "alias anchor='zenta anchor'" >> ~/.zshrc
 echo "alias reflect='zenta reflect'" >> ~/.zshrc
 source ~/.zshrc
 
 # Use instantly
 breath    # When mind wanders → return to breath (1 breath cycle)
-breathe   # Need deeper centering → longer session (3 breath cycles)  
+breathe   # Need deeper centering → longer session (3 breath cycles)
+anchor    # Find your rhythm → interactive breathing anchor
 reflect   # Evening → gentle day review
 ```
 
@@ -31,17 +33,20 @@ reflect   # Evening → gentle day review
 ## 🌸 Why zenta?
 
 ### **Fits Your Real Workflow**
+
 1. **Notice**: "I'm stuck in planning thoughts"
-2. **Return**: `breath` 
+2. **Return**: `breath`
 3. **Continue**: Back to coding, more present
 
 ### **True Zen Approach**
+
 - ✅ **No tracking** → Awareness isn't data to optimize
 - ✅ **No analytics** → The practice is the goal
 - ✅ **No disruption** → Stays in your terminal
 - ✅ **Just breathing** → Pure mindfulness
 
 ### **Built for Developers**
+
 - Terminal-native (fits your workflow)
 - Single binary (no dependencies)
 - Private (no data collection)
@@ -57,39 +62,43 @@ $ breath
        Let's breathe 🌸
 
     🌬️ Breathe in gently, let your body expand...
-                                                
-                      ○                         
-                    ○ · ○                       
-                     ···                        
-              ○ · · ·   · · · ○                
-                     ···                        
-                    ○ · ○                       
-                      ·                         
+
+                      ○
+                    ○ · ○
+                     ···
+              ○ · · ·   · · · ○
+                     ···
+                    ○ · ○
+                      ·
 
        Carry this calm with you throughout your day 🙏
 ```
 
-*Pure visual breathing guidance with gentle animations*
+_Pure visual breathing guidance with gentle animations_
 
 ---
 
 ## 💡 Commands
 
 ### **Essential Commands (with aliases)**
-| Command | Cycles | What It Does | Perfect For |
-|---------|--------|--------------|-------------|
-| `breath` | 1 cycle | Quick breathing + wisdom quote | Mind wandering moments |
-| `breathe` | 3 cycles | Standard breathing + wisdom quote | Before difficult tasks |
-| `reflect` | - | Gentle evening review | End of day contemplation |
+
+| Command   | Cycles   | What It Does                           | Perfect For                        |
+| --------- | -------- | -------------------------------------- | ---------------------------------- |
+| `breath`  | 1 cycle  | Quick breathing + wisdom quote         | Mind wandering moments             |
+| `breathe` | 3 cycles | Standard breathing + wisdom quote      | Before difficult tasks             |
+| `anchor`  | User-led | Interactive anchor to find your rhythm | When you need to set your own pace |
+| `reflect` | -        | Gentle evening review                  | End of day contemplation           |
 
 ### **Full Commands**
-| Command | Cycles | What It Does |
-|---------|--------|--------------|
-| `zenta now` | 3 cycles | Standard breathing + wisdom quote |
-| `zenta now --quick` | 1 cycle | Quick breathing + wisdom quote |
-| `zenta now --extended` | 5 cycles | Extended breathing + wisdom quote |
-| `zenta now --silent` | 3 cycles | Breathing only, no quote |
-| `zenta now --simple` | 3 cycles | Simple line animation (terminal compatibility) |
+
+| Command                | Cycles   | What It Does                                   |
+| ---------------------- | -------- | ---------------------------------------------- |
+| `zenta now`            | 3 cycles | Standard breathing + wisdom quote              |
+| `zenta now --quick`    | 1 cycle  | Quick breathing + wisdom quote                 |
+| `zenta now --extended` | 5 cycles | Extended breathing + wisdom quote              |
+| `zenta anchor`         | User-led | Interactive anchor to find your own rhythm     |
+| `zenta now --silent`   | 3 cycles | Breathing only, no quote                       |
+| `zenta now --simple`   | 3 cycles | Simple line animation (terminal compatibility) |
 
 **Mix options:** `zenta now --quick --silent` (1 cycle, no quote)
 
@@ -98,11 +107,13 @@ $ breath
 ## 🔧 Terminal Compatibility
 
 **Beautiful circles vs simple lines:**
+
 - **Most terminals**: Gorgeous expanding/contracting breathing circles
-- **macOS Terminal.app**: Auto-detects and uses simple line animation  
+- **macOS Terminal.app**: Auto-detects and uses simple line animation
 - **tmux/screen**: Works great with complex animations
 
 **Force simple mode:** Add `--simple` to any command
+
 ```bash
 breath --simple     # Force simple animation
 zenta now --simple  # Works with any options
@@ -115,12 +126,14 @@ zenta now --simple  # Works with any options
 ## 🎯 Real vs Fake Mindfulness
 
 **✅ Real mindfulness (zenta's way):**
+
 - Notice when mind wanders
-- Return to breath instantly  
+- Return to breath instantly
 - Continue work with awareness
 - No measurement needed
 
 **❌ Fake mindfulness:**
+
 - Tracking meditation streaks
 - Optimizing awareness metrics
 - Quantifying inner peace
@@ -130,9 +143,10 @@ zenta now --simple  # Works with any options
 
 ## 🌿 Philosophy
 
-> *"The quieter you become, the more you are able to hear."*
+> _"The quieter you become, the more you are able to hear."_
 
 **zenta believes:**
+
 - Mindfulness tools should disappear into practice
 - The noticing itself is enlightenment
 - Developers need presence, not productivity hacks
@@ -145,6 +159,7 @@ zenta now --simple  # Works with any options
 ### **Option 1: Pre-built Binaries (Recommended)**
 
 **macOS/Linux:**
+
 ```bash
 # Download and install the latest binary for your platform
 curl -s https://api.github.com/repos/e6a5/zenta/releases/latest \
@@ -165,7 +180,7 @@ Download the latest `.zip` file from [GitHub Releases](https://github.com/e6a5/z
 
 ### **Option 2: Build from Source**
 
-*Requires Go 1.23+ installed*
+_Requires Go 1.23+ installed_
 
 ```bash
 git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
@@ -173,14 +188,14 @@ git clone https://github.com/e6a5/zenta.git && cd zenta && make install-system
 
 **Install Go first:** [https://golang.org/dl/](https://golang.org/dl/)
 
-*Supports: Linux, macOS, Windows, FreeBSD (all architectures)*
+_Supports: Linux, macOS, Windows, FreeBSD (all architectures)_
 
 ---
 
 ## 🧘 Join the Practice
 
 - 🐛 **Bug reports** → [Issues](https://github.com/e6a5/zenta/issues)
-- 💭 **Mindful discussions** → [Discussions](https://github.com/e6a5/zenta/discussions)  
+- 💭 **Mindful discussions** → [Discussions](https://github.com/e6a5/zenta/discussions)
 - 🔧 **Contributions** → [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
@@ -191,7 +206,7 @@ MIT License - [LICENSE](LICENSE)
 
 ---
 
-> *"The best way to take care of the future is to take care of the present moment."* — Thich Nhat Hanh
+> _"The best way to take care of the future is to take care of the present moment."_ — Thich Nhat Hanh
 
 **Start your mindful coding practice today:**
 
