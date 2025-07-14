@@ -414,7 +414,8 @@ func (s *Session) StartAnchor() {
 
 	fmt.Println()
 	PrintWithPadding("   🌸")
-	PrintWithPadding("   Let the rhythm guide you. [SPACE] to switch phase, [q] to quit.")
+	PrintWithPadding("   The session is paused. Press [SPACE] to begin inhaling.")
+	PrintWithPadding("   Press [SPACE] again to exhale. [q] to quit.")
 	fmt.Println()
 
 	if err := s.runAnchorBreathing(); err != nil {
@@ -453,7 +454,7 @@ func (s *Session) runAnchorBreathing() error {
 	var (
 		breathSize int
 		maxSize    = 40
-		phase      = "inhale" // "inhale", "exhale", or "paused"
+		phase      = "paused" // "inhale", "exhale", or "paused"
 		keyPress   = make(chan byte, 1)
 	)
 
@@ -509,7 +510,7 @@ func (s *Session) runAnchorBreathing() error {
 
 		// 3. Render the visual and pause.
 		s.drawBreathingVisual(breathSize, maxSize, phase)
-		time.Sleep(90 * time.Millisecond) // Slower, more calming pace.
+		time.Sleep(150 * time.Millisecond) // Slower, more calming pace.
 	}
 }
 
