@@ -1,3 +1,34 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=e6a5&project=zenta&lang=id">Bahasa Indonesia</a>
+      </div>
+    </div>
+  </details>
+</div>
+
 # 🧘 zenta
 
 > **Mindfulness that fits your coding flow**
